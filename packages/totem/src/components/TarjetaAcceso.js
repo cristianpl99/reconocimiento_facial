@@ -100,7 +100,7 @@ export const TarjetaAcceso = () => {
           </button>
         </div>
         <div className="w-full max-w-md mt-4 h-28">
-          {isFeedbackState && resultData && (
+          {resultData && (
             <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto">
               <h2 className="font-bold text-sm text-white">Respuesta del Backend:</h2>
               <pre className="text-xs text-white whitespace-pre-wrap">
