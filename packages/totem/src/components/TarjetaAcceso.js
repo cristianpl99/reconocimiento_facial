@@ -66,7 +66,7 @@ export const TarjetaAcceso = () => {
       buttonText = (
         <>
           <CheckIcon className="w-6 h-6 mr-2" />
-          <span>Reconocimiento Exitoso</span>
+          <span>Acceso Concedido</span>
         </>
       );
       buttonClasses += " bg-green-500 text-white cursor-not-allowed border-b-4 border-green-700";
@@ -89,7 +89,7 @@ export const TarjetaAcceso = () => {
     buttonClasses += " bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed border-b-4 border-red-800";
   } else { // idle
     buttonText = "Activar Reconocimiento";
-    buttonClasses += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-600 border-b-4 border-blue-800 active:translate-y-1 active:border-b-0";
+    buttonClasses += " bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:ring-blue-600 border-b-4 border-blue-700 active:translate-y-1 active:border-b-0";
   }
 
   return (
@@ -97,16 +97,21 @@ export const TarjetaAcceso = () => {
       className="text-white flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-cover bg-center"
       style={{ backgroundImage: `url(${fondoMetal})` }}
     >
-      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
+      <div className="relative w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
         <img
           src={iconoOjo}
           alt="Icono de reconocimiento facial"
-          className="w-32 h-32 mb-6"
+          className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 transform -translate-y-full -translate-y-4"
         />
-        <h1 className="text-3xl md:text-4xl font-bold mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold mb-8">
           Acceso por Reconocimiento Facial
         </h1>
-        <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden">
+
+        {status === 'idle' && (
+          <p className="text-gray-400 text-sm mb-4">Por favor, mire a la cámara</p>
+        )}
+
+        <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.4)]">
           {(() => {
             if (isRecognitionActive) {
               return <CameraFeed ref={cameraRef} />;
@@ -117,16 +122,20 @@ export const TarjetaAcceso = () => {
                   <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover grayscale" />
                   <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
                     {status === 'verified' && (
-                      <CheckIcon className="w-24 h-24 text-green-500" />
+                      <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90 animate-pop-in">
+                        <CheckIcon className="w-24 h-24 text-white" />
+                      </div>
                     )}
                     {(status === 'failed' || status === 'clientError') && (
-                      <FailIcon className="w-24 h-24 text-red-500" />
+                      <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90 animate-pop-in">
+                        <FailIcon className="w-24 h-24 text-white" />
+                      </div>
                     )}
                   </div>
                 </div>
               );
             }
-            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-spin-slow" />;
+            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-pulse-opacity" />;
           })()}
         </div>
         <div className="w-full max-w-sm mb-8">
@@ -141,21 +150,21 @@ export const TarjetaAcceso = () => {
         </div>
         <div className="w-full max-w-md mt-4 h-28">
           {status === 'verified' && resultData?.data?.empleado && (
-            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto flex flex-col justify-center items-center text-white">
-              <p className="text-lg font-semibold">
-                Bienvenido, {resultData.data.empleado.cargo.nombre_cargo}
-              </p>
-              <p>
+            <div className="bg-slate-800 border border-slate-600 rounded-xl w-full h-full p-4 flex flex-col justify-center items-center text-white animate-pop-in">
+              <p className="text-2xl font-bold">
                 {resultData.data.empleado.nombre}{" "}
                 {resultData.data.empleado.apellido}
               </p>
-              <p>Turno {resultData.data.empleado.turno.nombre_turno}</p>
+              <div className="mt-2 text-center text-slate-300 font-light">
+                <p>{resultData.data.empleado.cargo.nombre_cargo}</p>
+                <p>Turno: {resultData.data.empleado.turno.nombre_turno}</p>
+              </div>
             </div>
           )}
         </div>
         <button
           type="button"
-          className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-red-500 hover:bg-red-600 border-b-4 border-red-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
+          className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-blue-500 hover:bg-blue-600 border-b-4 border-blue-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
           onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
         >
           Ayuda
