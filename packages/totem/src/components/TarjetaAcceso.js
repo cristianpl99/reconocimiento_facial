@@ -101,7 +101,7 @@ export const TarjetaAcceso = () => {
         <img
           src={iconoOjo}
           alt="Icono de reconocimiento facial"
-          className="w-32 h-32 mb-6"
+          className="w-32 h-32 mb-6 animate-spin-slow"
         />
         <h1 className="text-3xl md:text-4xl font-bold mb-8">
           Acceso por Reconocimiento Facial
