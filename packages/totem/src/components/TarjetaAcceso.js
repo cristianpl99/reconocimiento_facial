@@ -106,6 +106,11 @@ export const TarjetaAcceso = () => {
         <h1 className="text-2xl md:text-3xl font-bold mb-8">
           Acceso por Reconocimiento Facial
         </h1>
+
+        {status === 'idle' && (
+          <p className="text-gray-400 text-sm mb-4">Por favor, mire a la cámara</p>
+        )}
+
         <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.4)]">
           {(() => {
             if (isRecognitionActive) {
