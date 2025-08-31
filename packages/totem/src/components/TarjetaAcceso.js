@@ -6,6 +6,18 @@ import iconoOjo from "../assets/icono-ojo.png";
 import fondoMetal from "../assets/fondo-metal.png";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 
+const CheckIcon = () => (
+  <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+  </svg>
+);
+
+const FailIcon = () => (
+  <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+  </svg>
+);
+
 export const TarjetaAcceso = () => {
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -51,14 +63,21 @@ export const TarjetaAcceso = () => {
 
   if (isFeedbackState) {
     if (status === 'verified') {
-      buttonText = "Reconocimiento Válido";
-      buttonClasses += " bg-orange-500 text-white cursor-not-allowed";
-    } else if (status === 'failed') {
-      buttonText = "Reconocimiento Invalido";
-      buttonClasses += " bg-orange-500 text-white cursor-not-allowed";
-    } else { // clientError
-      buttonText = "Error de Petición";
-      buttonClasses += " bg-red-700 text-white cursor-not-allowed";
+      buttonText = (
+        <>
+          <CheckIcon />
+          <span>Reconocimiento Exitoso</span>
+        </>
+      );
+      buttonClasses += " bg-green-500 text-white cursor-not-allowed";
+    } else if (status === 'failed' || status === 'clientError') {
+      buttonText = (
+        <>
+          <FailIcon />
+          <span>Reconocimiento Invalido</span>
+        </>
+      );
+      buttonClasses += " bg-red-500 text-white cursor-not-allowed";
     }
   } else if (isRecognitionActive) {
     buttonText = (
