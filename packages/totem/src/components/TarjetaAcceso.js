@@ -42,10 +42,6 @@ export const TarjetaAcceso = () => {
     }
   };
 
-  const handleHelp = () => {
-    console.log("Help requested");
-  };
-
   const isRecognitionActive = status === 'recognizing';
   const isFeedbackState = status === 'verified' || status === 'failed';
 
@@ -103,14 +99,15 @@ export const TarjetaAcceso = () => {
             {buttonText}
           </button>
         </div>
-        <div className="w-full max-w-xs mt-4">
-          <button
-            className="w-full h-14 bg-red-600 text-lg font-bold rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200"
-            onClick={handleHelp}
-            type="button"
-          >
-            Ayuda
-          </button>
+        <div className="w-full max-w-md mt-4 h-28">
+          {isFeedbackState && resultData && (
+            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto">
+              <h2 className="font-bold text-sm text-white">Respuesta del Backend:</h2>
+              <pre className="text-xs text-white whitespace-pre-wrap">
+                {JSON.stringify(resultData, null, 2)}
+              </pre>
+            </div>
+          )}
         </div>
       </div>
     </main>
