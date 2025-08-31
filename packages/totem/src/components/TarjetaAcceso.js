@@ -122,10 +122,14 @@ export const TarjetaAcceso = () => {
                   <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover grayscale" />
                   <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
                     {status === 'verified' && (
-                      <CheckIcon className="w-24 h-24 text-green-500" />
+                      <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90">
+                        <CheckIcon className="w-24 h-24 text-white" />
+                      </div>
                     )}
                     {(status === 'failed' || status === 'clientError') && (
-                      <FailIcon className="w-24 h-24 text-red-500" />
+                      <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90">
+                        <FailIcon className="w-24 h-24 text-white" />
+                      </div>
                     )}
                   </div>
                 </div>
