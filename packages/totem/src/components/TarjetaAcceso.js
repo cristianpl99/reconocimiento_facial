@@ -16,7 +16,7 @@ export const TarjetaAcceso = () => {
     if (status === 'verified' || status === 'failed' || status === 'clientError') {
       const timer = setTimeout(() => {
         setStatus('idle');
-      }, 4000); // Revert to idle after 4 seconds
+      }, 6000); // Revert to idle after 6 seconds
 
       return () => clearTimeout(timer);
     }
