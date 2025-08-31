@@ -1,39 +1,68 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
-import { sendFaceRecognition } from "../services/faceRecognitionService";
+import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjo from "../assets/icono-ojo.png";
 import fondoMetal from "../assets/fondo-metal.png";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 
 export const TarjetaAcceso = () => {
-  const [isRecognitionActive, setIsRecognitionActive] = useState(false);
-  const [result, setResult] = useState(null);
+  const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed
+  const [resultData, setResultData] = useState(null);
   const cameraRef = useRef();
 
+  useEffect(() => {
+    if (status === 'verified' || status === 'failed') {
+      const timer = setTimeout(() => {
+        setStatus('idle');
+      }, 4000); // Revert to idle after 4 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   const handleActivateRecognition = async () => {
-    if (!isRecognitionActive) {
-      setIsRecognitionActive(true);
-      try {
-        // Esperamos un poquito a que la cámara prenda bien
-        setTimeout(async () => {
-          const screenshot = cameraRef.current.takeScreenshot();
-          if (screenshot) {
-            const response = await sendFaceRecognition(screenshot);
-            setResult(response); // guardás lo que devuelve tu API
-          }
-          setIsRecognitionActive(false);
-        }, 3000);
-      } catch (error) {
-        console.error("Error en reconocimiento:", error);
-        setIsRecognitionActive(false);
-      }
+    if (status !== 'idle') return;
+
+    setStatus('recognizing');
+    setResultData(null);
+
+    const result = await startFaceIdentification(cameraRef);
+
+    if (result.verified) {
+      setStatus('verified');
+      setResultData(result.data);
+    } else {
+      setStatus('failed');
+      setResultData(result);
     }
   };
 
   const handleHelp = () => {
     console.log("Help requested");
   };
+
+  const isRecognitionActive = status === 'recognizing';
+  const isFeedbackState = status === 'verified' || status === 'failed';
+
+  let buttonText;
+  let buttonClasses = "w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 flex items-center justify-center";
+
+  if (isFeedbackState) {
+    buttonText = status === 'verified' ? "Identidad Verificada" : "Identidad No Verificada";
+    buttonClasses += status === 'verified' ? " bg-green-500 text-white cursor-not-allowed" : " bg-orange-500 text-white cursor-not-allowed";
+  } else if (isRecognitionActive) {
+    buttonText = (
+      <>
+        <Spinner />
+        <span>Reconociendo...</span>
+      </>
+    );
+    buttonClasses += " bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed";
+  } else { // idle
+    buttonText = "Activar Reconocimiento";
+    buttonClasses += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-600";
+  }
 
   return (
     <main
@@ -58,31 +87,14 @@ export const TarjetaAcceso = () => {
         </div>
         <div className="w-full max-w-sm mb-8">
           <button
-            className={`w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 flex items-center justify-center ${
-              isRecognitionActive
-                ? "bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-600"
-            }`}
+            className={buttonClasses}
             onClick={handleActivateRecognition}
-            disabled={isRecognitionActive}
+            disabled={status !== 'idle'}
             type="button"
           >
-            {isRecognitionActive ? (
-              <>
-                <Spinner />
-                <span>Reconociendo...</span>
-              </>
-            ) : (
-              <span>Activar Reconocimiento</span>
-            )}
+            {buttonText}
           </button>
         </div>
-        {result && (
-          <div className="bg-gray-700 p-4 rounded-xl w-full text-left">
-            <h2 className="font-bold">Resultado:</h2>
-            <pre className="text-sm">{JSON.stringify(result, null, 2)}</pre>
-          </div>
-        )}
         <div className="w-full max-w-xs mt-4">
           <button
             className="w-full h-14 bg-red-600 text-lg font-bold rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200"
