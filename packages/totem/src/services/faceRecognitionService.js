@@ -31,12 +31,10 @@ export function startFaceIdentification(cameraRef) {
                     body: JSON.stringify({ "image_base64": base64Data }),
                 });
 
-                if (response.ok) {
+                if (response.status === 201) {
                     const result = await response.json();
-                    if (result) {
-                        clearInterval(intervalId);
-                        resolve({ verified: true, data: result, lastFrame: imageBase64 });
-                    }
+                    clearInterval(intervalId);
+                    resolve({ verified: true, data: result, lastFrame: imageBase64 });
                 }
             } catch (error) {
                 console.error("Error during face identification:", error);
