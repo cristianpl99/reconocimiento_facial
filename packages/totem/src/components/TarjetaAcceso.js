@@ -6,14 +6,14 @@ import iconoOjo from "../assets/icono-ojo.png";
 import fondoMetal from "../assets/fondo-metal.png";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 
-const CheckIcon = () => (
-  <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+const CheckIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
   </svg>
 );
 
-const FailIcon = () => (
-  <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+const FailIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
   </svg>
 );
@@ -65,7 +65,7 @@ export const TarjetaAcceso = () => {
     if (status === 'verified') {
       buttonText = (
         <>
-          <CheckIcon />
+          <CheckIcon className="w-6 h-6 mr-2" />
           <span>Reconocimiento Exitoso</span>
         </>
       );
@@ -73,7 +73,7 @@ export const TarjetaAcceso = () => {
     } else if (status === 'failed' || status === 'clientError') {
       buttonText = (
         <>
-          <FailIcon />
+          <FailIcon className="w-6 h-6 mr-2" />
           <span>Reconocimiento Invalido</span>
         </>
       );
@@ -112,7 +112,19 @@ export const TarjetaAcceso = () => {
               return <CameraFeed ref={cameraRef} />;
             }
             if (isFeedbackState && lastFrame) {
-              return <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover" />;
+              return (
+                <div className="relative w-full h-full">
+                  <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover grayscale" />
+                  <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
+                    {status === 'verified' && (
+                      <CheckIcon className="w-24 h-24 text-green-500" />
+                    )}
+                    {(status === 'failed' || status === 'clientError') && (
+                      <FailIcon className="w-24 h-24 text-red-500" />
+                    )}
+                  </div>
+                </div>
+              );
             }
             return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48" />;
           })()}
