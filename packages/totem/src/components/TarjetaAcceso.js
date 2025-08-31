@@ -97,11 +97,11 @@ export const TarjetaAcceso = () => {
       className="text-white flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-cover bg-center"
       style={{ backgroundImage: `url(${fondoMetal})` }}
     >
-      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
+      <div className="relative w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg p-6 sm:p-8 flex flex-col items-center text-center pt-16">
         <img
           src={iconoOjo}
           alt="Icono de reconocimiento facial"
-          className="w-24 h-24 mb-6"
+          className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2"
         />
         <h1 className="text-2xl md:text-3xl font-bold mb-8">
           Acceso por Reconocimiento Facial
