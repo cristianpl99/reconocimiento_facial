@@ -45,17 +45,21 @@ export const TarjetaAcceso = () => {
   const isRecognitionActive = status === 'recognizing';
 
   let statusMessage = "";
-  let statusMessageColor = "";
+  let statusContainerClasses = "bg-gray-700";
+  let statusTextClasses = "text-white";
 
   if (status === 'verified') {
     statusMessage = "Identidad Verificada";
-    statusMessageColor = "text-green-500";
+    statusContainerClasses = "bg-green-500";
+    statusTextClasses = "text-orange-500";
   } else if (status === 'failed') {
     statusMessage = "Identidad No Verificada";
-    statusMessageColor = "text-orange-500";
+    statusContainerClasses = "bg-orange-500";
+    statusTextClasses = "text-white";
   } else if (status === 'recognizing') {
     statusMessage = "Identificando...";
-    statusMessageColor = "text-white";
+    statusContainerClasses = "bg-gray-700";
+    statusTextClasses = "text-white";
   }
 
   return (
@@ -101,8 +105,8 @@ export const TarjetaAcceso = () => {
           </button>
         </div>
         {statusMessage && (
-          <div className="bg-gray-700 p-4 rounded-xl w-full text-center">
-            <h2 className={`font-bold text-xl ${statusMessageColor}`}>{statusMessage}</h2>
+          <div className={`${statusContainerClasses} p-4 rounded-xl w-full text-center`}>
+            <h2 className={`font-bold text-xl ${statusTextClasses}`}>{statusMessage}</h2>
           </div>
         )}
         <div className="w-full max-w-xs mt-4">
