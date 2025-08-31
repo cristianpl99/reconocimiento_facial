@@ -150,15 +150,15 @@ export const TarjetaAcceso = () => {
         </div>
         <div className="w-full max-w-md mt-4 h-28">
           {status === 'verified' && resultData?.data?.empleado && (
-            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto flex flex-col justify-center items-center text-white">
-              <p className="text-lg font-semibold">
-                Bienvenido, {resultData.data.empleado.cargo.nombre_cargo}
-              </p>
-              <p>
+            <div className="bg-slate-800 border border-slate-600 rounded-xl w-full h-full p-4 flex flex-col justify-center items-center text-white animate-pop-in">
+              <p className="text-2xl font-bold">
                 {resultData.data.empleado.nombre}{" "}
                 {resultData.data.empleado.apellido}
               </p>
-              <p>Turno {resultData.data.empleado.turno.nombre_turno}</p>
+              <div className="mt-2 text-center text-slate-300 font-light">
+                <p>{resultData.data.empleado.cargo.nombre_cargo}</p>
+                <p>Turno: {resultData.data.empleado.turno.nombre_turno}</p>
+              </div>
             </div>
           )}
         </div>
