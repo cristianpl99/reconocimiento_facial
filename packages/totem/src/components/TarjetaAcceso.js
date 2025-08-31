@@ -51,10 +51,10 @@ export const TarjetaAcceso = () => {
 
   if (isFeedbackState) {
     if (status === 'verified') {
-      buttonText = "Identidad Verificada";
-      buttonClasses += " bg-green-500 text-white cursor-not-allowed";
+      buttonText = "Reconocimiento Válido";
+      buttonClasses += " bg-orange-500 text-white cursor-not-allowed";
     } else if (status === 'failed') {
-      buttonText = "Identidad No Verificada";
+      buttonText = "Reconocimiento Invalido";
       buttonClasses += " bg-orange-500 text-white cursor-not-allowed";
     } else { // clientError
       buttonText = "Error de Petición";
@@ -109,12 +109,16 @@ export const TarjetaAcceso = () => {
           </button>
         </div>
         <div className="w-full max-w-md mt-4 h-28">
-          {resultData && (
-            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto">
-              <h2 className="font-bold text-sm text-white">Respuesta del Backend:</h2>
-              <pre className="text-xs text-white whitespace-pre-wrap">
-                {JSON.stringify(resultData, null, 2)}
-              </pre>
+          {status === 'verified' && resultData?.data?.empleado && (
+            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto flex flex-col justify-center items-center text-white">
+              <p className="text-lg font-semibold">
+                Bienvenido, {resultData.data.empleado.cargo.nombre_cargo}
+              </p>
+              <p>
+                {resultData.data.empleado.nombre}{" "}
+                {resultData.data.empleado.apellido}
+              </p>
+              <p>Turno {resultData.data.empleado.turno.nombre_turno}</p>
             </div>
           )}
         </div>
