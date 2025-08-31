@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
@@ -10,6 +10,16 @@ export const TarjetaAcceso = () => {
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed
   const [resultData, setResultData] = useState(null);
   const cameraRef = useRef();
+
+  useEffect(() => {
+    if (status === 'verified' || status === 'failed') {
+      const timer = setTimeout(() => {
+        setStatus('idle');
+      }, 4000); // Hide message after 4 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const handleActivateRecognition = async () => {
     if (status === 'recognizing') return;
@@ -24,7 +34,7 @@ export const TarjetaAcceso = () => {
       setResultData(result.data);
     } else {
       setStatus('failed');
-      setResultData(result); // Contains { verified: false, message: '...' }
+      setResultData(result);
     }
   };
 
@@ -35,12 +45,17 @@ export const TarjetaAcceso = () => {
   const isRecognitionActive = status === 'recognizing';
 
   let statusMessage = "";
+  let statusMessageColor = "";
+
   if (status === 'verified') {
-    statusMessage = "Identidad verificada";
+    statusMessage = "Identidad Verificada";
+    statusMessageColor = "text-green-500";
   } else if (status === 'failed') {
-    statusMessage = "Identidad no verificada";
+    statusMessage = "Identidad No Verificada";
+    statusMessageColor = "text-orange-500";
   } else if (status === 'recognizing') {
-      statusMessage = "Identificando...";
+    statusMessage = "Identificando...";
+    statusMessageColor = "text-white";
   }
 
   return (
@@ -87,7 +102,7 @@ export const TarjetaAcceso = () => {
         </div>
         {statusMessage && (
           <div className="bg-gray-700 p-4 rounded-xl w-full text-center">
-            <h2 className="font-bold text-xl">{statusMessage}</h2>
+            <h2 className={`font-bold text-xl ${statusMessageColor}`}>{statusMessage}</h2>
           </div>
         )}
         <div className="w-full max-w-xs mt-4">

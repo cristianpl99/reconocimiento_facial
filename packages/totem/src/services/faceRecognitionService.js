@@ -1,7 +1,7 @@
 export function startFaceIdentification(cameraRef) {
     return new Promise((resolve) => {
         const startTime = Date.now();
-        const duration = 4000; // 4 seconds
+        const duration = 6000; // 6 seconds
         const intervalTime = 500; // 500 ms
 
         const intervalId = setInterval(async () => {
