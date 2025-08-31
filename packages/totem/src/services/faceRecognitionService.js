@@ -38,12 +38,6 @@ export function startFaceIdentification(cameraRef) {
                     return; // End the loop on success
                 }
 
-                if (response.status === 400 || response.status === 404) {
-                    // Hard stop for client errors
-                    resolve({ verified: false, error: 'ClientError', message: `Error ${response.status}`, lastFrame: imageBase64 });
-                    return;
-                }
-
                 if (response.status >= 500) {
                     // Server error, wait 1s and continue loop
                     await new Promise(res => setTimeout(res, 1000));

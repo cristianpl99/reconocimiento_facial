@@ -6,6 +6,18 @@ import iconoOjo from "../assets/icono-ojo.png";
 import fondoMetal from "../assets/fondo-metal.png";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 
+const CheckIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+  </svg>
+);
+
+const FailIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+  </svg>
+);
+
 export const TarjetaAcceso = () => {
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -16,7 +28,7 @@ export const TarjetaAcceso = () => {
     if (status === 'verified' || status === 'failed' || status === 'clientError') {
       const timer = setTimeout(() => {
         setStatus('idle');
-      }, 4000); // Revert to idle after 4 seconds
+      }, 6000); // Revert to idle after 6 seconds
 
       return () => clearTimeout(timer);
     }
@@ -51,14 +63,21 @@ export const TarjetaAcceso = () => {
 
   if (isFeedbackState) {
     if (status === 'verified') {
-      buttonText = "Identidad Verificada";
+      buttonText = (
+        <>
+          <CheckIcon className="w-6 h-6 mr-2" />
+          <span>Reconocimiento Exitoso</span>
+        </>
+      );
       buttonClasses += " bg-green-500 text-white cursor-not-allowed";
-    } else if (status === 'failed') {
-      buttonText = "Identidad No Verificada";
-      buttonClasses += " bg-orange-500 text-white cursor-not-allowed";
-    } else { // clientError
-      buttonText = "Error de Petición";
-      buttonClasses += " bg-red-700 text-white cursor-not-allowed";
+    } else if (status === 'failed' || status === 'clientError') {
+      buttonText = (
+        <>
+          <FailIcon className="w-6 h-6 mr-2" />
+          <span>Reconocimiento Invalido</span>
+        </>
+      );
+      buttonClasses += " bg-red-500 text-white cursor-not-allowed";
     }
   } else if (isRecognitionActive) {
     buttonText = (
@@ -93,7 +112,19 @@ export const TarjetaAcceso = () => {
               return <CameraFeed ref={cameraRef} />;
             }
             if (isFeedbackState && lastFrame) {
-              return <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover" />;
+              return (
+                <div className="relative w-full h-full">
+                  <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover grayscale" />
+                  <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
+                    {status === 'verified' && (
+                      <CheckIcon className="w-24 h-24 text-green-500" />
+                    )}
+                    {(status === 'failed' || status === 'clientError') && (
+                      <FailIcon className="w-24 h-24 text-red-500" />
+                    )}
+                  </div>
+                </div>
+              );
             }
             return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48" />;
           })()}
@@ -109,12 +140,16 @@ export const TarjetaAcceso = () => {
           </button>
         </div>
         <div className="w-full max-w-md mt-4 h-28">
-          {resultData && (
-            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto">
-              <h2 className="font-bold text-sm text-white">Respuesta del Backend:</h2>
-              <pre className="text-xs text-white whitespace-pre-wrap">
-                {JSON.stringify(resultData, null, 2)}
-              </pre>
+          {status === 'verified' && resultData?.data?.empleado && (
+            <div className="bg-gray-700 p-2 rounded-xl w-full h-full text-left overflow-auto flex flex-col justify-center items-center text-white">
+              <p className="text-lg font-semibold">
+                Bienvenido, {resultData.data.empleado.cargo.nombre_cargo}
+              </p>
+              <p>
+                {resultData.data.empleado.nombre}{" "}
+                {resultData.data.empleado.apellido}
+              </p>
+              <p>Turno {resultData.data.empleado.turno.nombre_turno}</p>
             </div>
           )}
         </div>
