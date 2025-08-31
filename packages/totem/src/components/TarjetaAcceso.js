@@ -66,7 +66,7 @@ export const TarjetaAcceso = () => {
       buttonText = (
         <>
           <CheckIcon className="w-6 h-6 mr-2" />
-          <span>Reconocimiento Exitoso</span>
+          <span>Acceso Concedido</span>
         </>
       );
       buttonClasses += " bg-green-500 text-white cursor-not-allowed border-b-4 border-green-700";
@@ -122,12 +122,12 @@ export const TarjetaAcceso = () => {
                   <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover grayscale" />
                   <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
                     {status === 'verified' && (
-                      <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90">
+                      <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90 animate-pop-in">
                         <CheckIcon className="w-24 h-24 text-white" />
                       </div>
                     )}
                     {(status === 'failed' || status === 'clientError') && (
-                      <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90">
+                      <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90 animate-pop-in">
                         <FailIcon className="w-24 h-24 text-white" />
                       </div>
                     )}
