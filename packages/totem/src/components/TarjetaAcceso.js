@@ -101,7 +101,7 @@ export const TarjetaAcceso = () => {
         <img
           src={iconoOjo}
           alt="Icono de reconocimiento facial"
-          className="w-32 h-32 mb-6 animate-spin-slow"
+          className="w-32 h-32 mb-6"
         />
         <h1 className="text-3xl md:text-4xl font-bold mb-8">
           Acceso por Reconocimiento Facial
@@ -126,7 +126,7 @@ export const TarjetaAcceso = () => {
                 </div>
               );
             }
-            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48" />;
+            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-spin-slow" />;
           })()}
         </div>
         <div className="w-full max-w-sm mb-8">
