@@ -21,7 +21,7 @@ export function startFaceIdentification(cameraRef) {
 
             try {
                 const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
-                const response = await fetch("https://face-api-latest.onrender.com/face-identify", {
+                const response = await fetch("https://face-api-latest.onrender.com/api/ingreso-face/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
