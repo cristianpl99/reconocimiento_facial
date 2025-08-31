@@ -3,15 +3,20 @@ export function startFaceIdentification(cameraRef) {
         const startTime = Date.now();
         const duration = 6000; // 6 seconds
         const intervalTime = 500; // 500 ms
+        let lastImageBase64 = null;
 
         const intervalId = setInterval(async () => {
+            const imageBase64 = cameraRef.current?.takeScreenshot();
+            if (imageBase64) {
+                lastImageBase64 = imageBase64;
+            }
+
             if (Date.now() - startTime > duration) {
                 clearInterval(intervalId);
-                resolve({ verified: false, message: "Timeout" });
+                resolve({ verified: false, message: "Timeout", lastFrame: lastImageBase64 });
                 return;
             }
 
-            const imageBase64 = cameraRef.current?.takeScreenshot();
             if (!imageBase64) {
                 return;
             }
@@ -28,15 +33,13 @@ export function startFaceIdentification(cameraRef) {
 
                 if (response.ok) {
                     const result = await response.json();
-                    // Assuming any successful JSON response is a positive identification
                     if (result) {
                         clearInterval(intervalId);
-                        resolve({ verified: true, data: result });
+                        resolve({ verified: true, data: result, lastFrame: imageBase64 });
                     }
                 }
             } catch (error) {
                 console.error("Error during face identification:", error);
-                // Continue trying until timeout
             }
         }, intervalTime);
     });

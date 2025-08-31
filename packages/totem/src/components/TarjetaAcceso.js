@@ -9,6 +9,7 @@ import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 export const TarjetaAcceso = () => {
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed
   const [resultData, setResultData] = useState(null);
+  const [lastFrame, setLastFrame] = useState(null);
   const cameraRef = useRef();
 
   useEffect(() => {
@@ -24,10 +25,13 @@ export const TarjetaAcceso = () => {
   const handleActivateRecognition = async () => {
     if (status !== 'idle') return;
 
+    setLastFrame(null);
     setStatus('recognizing');
     setResultData(null);
 
     const result = await startFaceIdentification(cameraRef);
+
+    setLastFrame(result.lastFrame);
 
     if (result.verified) {
       setStatus('verified');
@@ -79,11 +83,15 @@ export const TarjetaAcceso = () => {
           Acceso por Reconocimiento Facial
         </h1>
         <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden">
-          {isRecognitionActive ? (
-            <CameraFeed ref={cameraRef} />
-          ) : (
-            <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48" />
-          )}
+          {(() => {
+            if (isRecognitionActive) {
+              return <CameraFeed ref={cameraRef} />;
+            }
+            if (isFeedbackState && lastFrame) {
+              return <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover" />;
+            }
+            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48" />;
+          })()}
         </div>
         <div className="w-full max-w-sm mb-8">
           <button
