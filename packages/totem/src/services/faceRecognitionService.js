@@ -1,7 +1,7 @@
 export function startFaceIdentification(cameraRef) {
     return new Promise((resolve) => {
         const startTime = Date.now();
-        const duration = 6000; // 6 seconds
+        const duration = 12000; // 12 seconds
         let lastImageBase64 = null;
 
         const recognitionLoop = async () => {
@@ -37,12 +37,29 @@ export function startFaceIdentification(cameraRef) {
                     resolve({ verified: true, data: result, lastFrame: imageBase64 });
                     return; // End the loop on success
                 }
+
+                if (response.status === 400 || response.status === 404) {
+                    // Hard stop for client errors
+                    resolve({ verified: false, error: 'ClientError', message: `Error ${response.status}`, lastFrame: imageBase64 });
+                    return;
+                }
+
+                if (response.status >= 500) {
+                    // Server error, wait 1s and continue loop
+                    await new Promise(res => setTimeout(res, 1000));
+                    recognitionLoop();
+                    return;
+                }
+
             } catch (error) {
                 console.error("Error during face identification:", error);
-                // Continue the loop even if one request fails
+                // Network error, wait 1s and continue loop
+                await new Promise(res => setTimeout(res, 1000));
+                recognitionLoop();
+                return;
             }
 
-            // If not verified, or if there was a non-blocking error, continue the loop
+            // For any other non-201/4xx/5xx response, continue the loop immediately
             recognitionLoop();
         };
 

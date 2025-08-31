@@ -7,13 +7,13 @@ import fondoMetal from "../assets/fondo-metal.png";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 
 export const TarjetaAcceso = () => {
-  const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed
+  const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
   const [lastFrame, setLastFrame] = useState(null);
   const cameraRef = useRef();
 
   useEffect(() => {
-    if (status === 'verified' || status === 'failed') {
+    if (status === 'verified' || status === 'failed' || status === 'clientError') {
       const timer = setTimeout(() => {
         setStatus('idle');
       }, 4000); // Revert to idle after 4 seconds
@@ -32,25 +32,34 @@ export const TarjetaAcceso = () => {
     const result = await startFaceIdentification(cameraRef);
 
     setLastFrame(result.lastFrame);
+    setResultData(result); // Store result data for all outcomes for debugging
 
     if (result.verified) {
       setStatus('verified');
-      setResultData(result.data);
+    } else if (result.error === 'ClientError') {
+      setStatus('clientError');
     } else {
-      setStatus('failed');
-      setResultData(result);
+      setStatus('failed'); // This will be for timeouts
     }
   };
 
   const isRecognitionActive = status === 'recognizing';
-  const isFeedbackState = status === 'verified' || status === 'failed';
+  const isFeedbackState = status === 'verified' || status === 'failed' || status === 'clientError';
 
   let buttonText;
   let buttonClasses = "w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 flex items-center justify-center";
 
   if (isFeedbackState) {
-    buttonText = status === 'verified' ? "Identidad Verificada" : "Identidad No Verificada";
-    buttonClasses += status === 'verified' ? " bg-green-500 text-white cursor-not-allowed" : " bg-orange-500 text-white cursor-not-allowed";
+    if (status === 'verified') {
+      buttonText = "Identidad Verificada";
+      buttonClasses += " bg-green-500 text-white cursor-not-allowed";
+    } else if (status === 'failed') {
+      buttonText = "Identidad No Verificada";
+      buttonClasses += " bg-orange-500 text-white cursor-not-allowed";
+    } else { // clientError
+      buttonText = "Error de Petición";
+      buttonClasses += " bg-red-700 text-white cursor-not-allowed";
+    }
   } else if (isRecognitionActive) {
     buttonText = (
       <>
