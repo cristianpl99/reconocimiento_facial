@@ -28,7 +28,10 @@ export function startFaceIdentification(cameraRef) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ "image_base64": base64Data }),
+                    body: JSON.stringify({
+                        "tipo": "ingreso",
+                        "image_base64": base64Data
+                    }),
                 });
 
                 if (response.status === 201) {
