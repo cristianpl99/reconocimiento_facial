@@ -2,22 +2,20 @@ export function startFaceIdentification(cameraRef) {
     return new Promise((resolve) => {
         const startTime = Date.now();
         const duration = 6000; // 6 seconds
-        const intervalTime = 500; // 500 ms
         let lastImageBase64 = null;
 
-        const intervalId = setInterval(async () => {
-            const imageBase64 = cameraRef.current?.takeScreenshot();
-            if (imageBase64) {
-                lastImageBase64 = imageBase64;
-            }
-
+        const recognitionLoop = async () => {
             if (Date.now() - startTime > duration) {
-                clearInterval(intervalId);
                 resolve({ verified: false, message: "Timeout", lastFrame: lastImageBase64 });
                 return;
             }
 
-            if (!imageBase64) {
+            const imageBase64 = cameraRef.current?.takeScreenshot();
+            if (imageBase64) {
+                lastImageBase64 = imageBase64;
+            } else {
+                // If camera isn't ready, wait a moment and try the loop again.
+                setTimeout(recognitionLoop, 100);
                 return;
             }
 
@@ -36,12 +34,19 @@ export function startFaceIdentification(cameraRef) {
 
                 if (response.status === 201) {
                     const result = await response.json();
-                    clearInterval(intervalId);
                     resolve({ verified: true, data: result, lastFrame: imageBase64 });
+                    return; // End the loop on success
                 }
             } catch (error) {
                 console.error("Error during face identification:", error);
+                // Continue the loop even if one request fails
             }
-        }, intervalTime);
+
+            // If not verified, or if there was a non-blocking error, continue the loop
+            recognitionLoop();
+        };
+
+        // Start the recognition loop
+        recognitionLoop();
     });
 }
