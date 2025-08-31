@@ -59,7 +59,7 @@ export const TarjetaAcceso = () => {
   const isFeedbackState = status === 'verified' || status === 'failed' || status === 'clientError';
 
   let buttonText;
-  let buttonClasses = "w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 flex items-center justify-center";
+  let buttonClasses = "w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-150 flex items-center justify-center";
 
   if (isFeedbackState) {
     if (status === 'verified') {
@@ -69,7 +69,7 @@ export const TarjetaAcceso = () => {
           <span>Reconocimiento Exitoso</span>
         </>
       );
-      buttonClasses += " bg-green-500 text-white cursor-not-allowed";
+      buttonClasses += " bg-green-500 text-white cursor-not-allowed border-b-4 border-green-700";
     } else if (status === 'failed' || status === 'clientError') {
       buttonText = (
         <>
@@ -77,7 +77,7 @@ export const TarjetaAcceso = () => {
           <span>Reconocimiento Invalido</span>
         </>
       );
-      buttonClasses += " bg-red-500 text-white cursor-not-allowed";
+      buttonClasses += " bg-red-500 text-white cursor-not-allowed border-b-4 border-red-700";
     }
   } else if (isRecognitionActive) {
     buttonText = (
@@ -86,10 +86,10 @@ export const TarjetaAcceso = () => {
         <span>Reconociendo...</span>
       </>
     );
-    buttonClasses += " bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed";
+    buttonClasses += " bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed border-b-4 border-red-800";
   } else { // idle
     buttonText = "Activar Reconocimiento";
-    buttonClasses += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-600";
+    buttonClasses += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-600 border-b-4 border-blue-800 active:translate-y-1 active:border-b-0";
   }
 
   return (
@@ -154,6 +154,13 @@ export const TarjetaAcceso = () => {
           )}
         </div>
       </div>
+      <button
+        type="button"
+        className="fixed bottom-8 right-8 w-32 h-8 text-sm font-bold rounded-xl text-white bg-red-500 hover:bg-red-600 border-b-4 border-red-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
+        onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
+      >
+        Ayuda
+      </button>
     </main>
   );
 };
