@@ -89,7 +89,7 @@ export const TarjetaAcceso = () => {
     buttonClasses += " bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed border-b-4 border-red-800";
   } else { // idle
     buttonText = "Activar Reconocimiento";
-    buttonClasses += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-600 border-b-4 border-blue-800 active:translate-y-1 active:border-b-0";
+    buttonClasses += " bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:ring-blue-600 border-b-4 border-blue-700 active:translate-y-1 active:border-b-0";
   }
 
   return (
@@ -103,10 +103,10 @@ export const TarjetaAcceso = () => {
           alt="Icono de reconocimiento facial"
           className="w-32 h-32 mb-6"
         />
-        <h1 className="text-3xl md:text-4xl font-bold mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold mb-8">
           Acceso por Reconocimiento Facial
         </h1>
-        <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden">
+        <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.4)]">
           {(() => {
             if (isRecognitionActive) {
               return <CameraFeed ref={cameraRef} />;
@@ -155,7 +155,7 @@ export const TarjetaAcceso = () => {
         </div>
         <button
           type="button"
-          className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-red-500 hover:bg-red-600 border-b-4 border-red-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
+          className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-blue-500 hover:bg-blue-600 border-b-4 border-blue-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
           onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
         >
           Ayuda
