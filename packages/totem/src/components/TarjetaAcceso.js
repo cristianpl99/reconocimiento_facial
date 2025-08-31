@@ -1,39 +1,47 @@
 import React, { useState, useRef } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
-import { sendFaceRecognition } from "../services/faceRecognitionService";
+import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjo from "../assets/icono-ojo.png";
 import fondoMetal from "../assets/fondo-metal.png";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 
 export const TarjetaAcceso = () => {
-  const [isRecognitionActive, setIsRecognitionActive] = useState(false);
-  const [result, setResult] = useState(null);
+  const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed
+  const [resultData, setResultData] = useState(null);
   const cameraRef = useRef();
 
   const handleActivateRecognition = async () => {
-    if (!isRecognitionActive) {
-      setIsRecognitionActive(true);
-      try {
-        // Esperamos un poquito a que la cámara prenda bien
-        setTimeout(async () => {
-          const screenshot = cameraRef.current.takeScreenshot();
-          if (screenshot) {
-            const response = await sendFaceRecognition(screenshot);
-            setResult(response); // guardás lo que devuelve tu API
-          }
-          setIsRecognitionActive(false);
-        }, 3000);
-      } catch (error) {
-        console.error("Error en reconocimiento:", error);
-        setIsRecognitionActive(false);
-      }
+    if (status === 'recognizing') return;
+
+    setStatus('recognizing');
+    setResultData(null);
+
+    const result = await startFaceIdentification(cameraRef);
+
+    if (result.verified) {
+      setStatus('verified');
+      setResultData(result.data);
+    } else {
+      setStatus('failed');
+      setResultData(result); // Contains { verified: false, message: '...' }
     }
   };
 
   const handleHelp = () => {
     console.log("Help requested");
   };
+
+  const isRecognitionActive = status === 'recognizing';
+
+  let statusMessage = "";
+  if (status === 'verified') {
+    statusMessage = "Identidad verificada";
+  } else if (status === 'failed') {
+    statusMessage = "Identidad no verificada";
+  } else if (status === 'recognizing') {
+      statusMessage = "Identificando...";
+  }
 
   return (
     <main
@@ -77,10 +85,9 @@ export const TarjetaAcceso = () => {
             )}
           </button>
         </div>
-        {result && (
-          <div className="bg-gray-700 p-4 rounded-xl w-full text-left">
-            <h2 className="font-bold">Resultado:</h2>
-            <pre className="text-sm">{JSON.stringify(result, null, 2)}</pre>
+        {statusMessage && (
+          <div className="bg-gray-700 p-4 rounded-xl w-full text-center">
+            <h2 className="font-bold text-xl">{statusMessage}</h2>
           </div>
         )}
         <div className="w-full max-w-xs mt-4">
