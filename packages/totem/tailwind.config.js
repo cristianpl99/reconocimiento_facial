@@ -8,8 +8,14 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
+      keyframes: {
+        'pulse-opacity': {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: 0.2 },
+        }
+      },
       animation: {
-        'spin-slow': 'spin 10s linear infinite',
+        'pulse-opacity': 'pulse-opacity 4s ease-in-out infinite',
       }
     },
   },

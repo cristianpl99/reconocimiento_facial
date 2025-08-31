@@ -126,7 +126,7 @@ export const TarjetaAcceso = () => {
                 </div>
               );
             }
-            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-spin-slow" />;
+            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-pulse-opacity" />;
           })()}
         </div>
         <div className="w-full max-w-sm mb-8">
