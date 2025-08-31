@@ -15,14 +15,14 @@ export const TarjetaAcceso = () => {
     if (status === 'verified' || status === 'failed') {
       const timer = setTimeout(() => {
         setStatus('idle');
-      }, 4000); // Hide message after 4 seconds
+      }, 4000); // Revert to idle after 4 seconds
 
       return () => clearTimeout(timer);
     }
   }, [status]);
 
   const handleActivateRecognition = async () => {
-    if (status === 'recognizing') return;
+    if (status !== 'idle') return;
 
     setStatus('recognizing');
     setResultData(null);
@@ -43,23 +43,25 @@ export const TarjetaAcceso = () => {
   };
 
   const isRecognitionActive = status === 'recognizing';
+  const isFeedbackState = status === 'verified' || status === 'failed';
 
-  let statusMessage = "";
-  let statusContainerClasses = "bg-gray-700";
-  let statusTextClasses = "text-white";
+  let buttonText;
+  let buttonClasses = "w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 flex items-center justify-center";
 
-  if (status === 'verified') {
-    statusMessage = "Identidad Verificada";
-    statusContainerClasses = "bg-green-500";
-    statusTextClasses = "text-orange-500";
-  } else if (status === 'failed') {
-    statusMessage = "Identidad No Verificada";
-    statusContainerClasses = "bg-orange-500";
-    statusTextClasses = "text-white";
-  } else if (status === 'recognizing') {
-    statusMessage = "Identificando...";
-    statusContainerClasses = "bg-gray-700";
-    statusTextClasses = "text-white";
+  if (isFeedbackState) {
+    buttonText = status === 'verified' ? "Identidad Verificada" : "Identidad No Verificada";
+    buttonClasses += status === 'verified' ? " bg-green-500 text-white cursor-not-allowed" : " bg-orange-500 text-white cursor-not-allowed";
+  } else if (isRecognitionActive) {
+    buttonText = (
+      <>
+        <Spinner />
+        <span>Reconociendo...</span>
+      </>
+    );
+    buttonClasses += " bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed";
+  } else { // idle
+    buttonText = "Activar Reconocimiento";
+    buttonClasses += " bg-blue-600 hover:bg-blue-700 focus:ring-blue-600";
   }
 
   return (
@@ -85,30 +87,14 @@ export const TarjetaAcceso = () => {
         </div>
         <div className="w-full max-w-sm mb-8">
           <button
-            className={`w-full h-16 text-xl font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 flex items-center justify-center ${
-              isRecognitionActive
-                ? "bg-red-600 hover:bg-red-700 focus:ring-red-600 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-600"
-            }`}
+            className={buttonClasses}
             onClick={handleActivateRecognition}
-            disabled={isRecognitionActive}
+            disabled={status !== 'idle'}
             type="button"
           >
-            {isRecognitionActive ? (
-              <>
-                <Spinner />
-                <span>Reconociendo...</span>
-              </>
-            ) : (
-              <span>Activar Reconocimiento</span>
-            )}
+            {buttonText}
           </button>
         </div>
-        {statusMessage && (
-          <div className={`${statusContainerClasses} p-4 rounded-xl w-full text-center`}>
-            <h2 className={`font-bold text-xl ${statusTextClasses}`}>{statusMessage}</h2>
-          </div>
-        )}
         <div className="w-full max-w-xs mt-4">
           <button
             className="w-full h-14 bg-red-600 text-lg font-bold rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200"
