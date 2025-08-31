@@ -153,14 +153,14 @@ export const TarjetaAcceso = () => {
             </div>
           )}
         </div>
+        <button
+          type="button"
+          className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-red-500 hover:bg-red-600 border-b-4 border-red-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
+          onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
+        >
+          Ayuda
+        </button>
       </div>
-      <button
-        type="button"
-        className="fixed bottom-8 right-8 w-32 h-8 text-sm font-bold rounded-xl text-white bg-red-500 hover:bg-red-600 border-b-4 border-red-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
-        onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
-      >
-        Ayuda
-      </button>
     </main>
   );
 };
