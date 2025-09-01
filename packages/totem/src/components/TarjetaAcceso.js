@@ -97,78 +97,84 @@ export const TarjetaAcceso = () => {
       className="text-white flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-cover bg-center"
       style={{ backgroundImage: `url(${fondoMetal})` }}
     >
-      <div className="relative w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
-        <img
-          src={iconoOjo}
-          alt="Icono de reconocimiento facial"
-          className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 transform -translate-y-full -translate-y-4"
-        />
-        <h1 className="text-2xl md:text-3xl font-bold mb-8">
-          Acceso por Reconocimiento Facial
-        </h1>
-
-        {status === 'idle' && (
-          <p className="text-gray-400 text-sm mb-4">Por favor, mire a la cámara</p>
+      <div className="relative w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg overflow-hidden" style={{ minHeight: '48rem' }}>
+        {/* Background Layer */}
+        {isFeedbackState && lastFrame && (
+          <img src={lastFrame} alt="Fondo de reconocimiento" className="absolute inset-0 w-full h-full object-cover grayscale" />
         )}
+        <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${isFeedbackState && lastFrame ? 'bg-opacity-60' : 'bg-opacity-0'}`}></div>
 
-        <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl mb-8 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.4)]">
-          {(() => {
-            if (isRecognitionActive) {
-              return <CameraFeed ref={cameraRef} />;
-            }
-            if (isFeedbackState && lastFrame) {
-              return (
-                <div className="relative w-full h-full">
-                  <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover grayscale" />
-                  <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
-                    {status === 'verified' && (
-                      <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90 animate-pop-in">
-                        <CheckIcon className="w-24 h-24 text-white" />
-                      </div>
-                    )}
-                    {(status === 'failed' || status === 'clientError') && (
-                      <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90 animate-pop-in">
-                        <FailIcon className="w-24 h-24 text-white" />
-                      </div>
-                    )}
+        {/* Content Layer */}
+        <div className="relative z-10 p-6 sm:p-8 flex flex-col items-center text-center h-full">
+          <img
+            src={iconoOjo}
+            alt="Icono de reconocimiento facial"
+            className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 transform -translate-y-full -translate-y-4"
+          />
+
+          <div className="flex-grow w-full flex flex-col items-center justify-center">
+            {isFeedbackState ? (
+              <div className="animate-pop-in">
+                {status === 'verified' && (
+                  <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90">
+                    <CheckIcon className="w-24 h-24 text-white" />
+                  </div>
+                )}
+                {(status === 'failed' || status === 'clientError') && (
+                  <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90">
+                    <FailIcon className="w-24 h-24 text-white" />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <h1 className="text-2xl md:text-3xl font-bold mb-8">
+                  Acceso por Reconocimiento Facial
+                </h1>
+                {status === 'idle' && (
+                  <p className="text-gray-400 text-sm mb-4">Por favor, mire a la cámara</p>
+                )}
+                <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+                  {isRecognitionActive ? <CameraFeed ref={cameraRef} /> : <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-pulse-opacity" />}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="w-full max-w-sm mt-auto">
+            <div className="h-16 mb-4">
+              <button
+                className={buttonClasses}
+                onClick={handleActivateRecognition}
+                disabled={status !== 'idle'}
+                type="button"
+              >
+                {buttonText}
+              </button>
+            </div>
+            <div className="mt-4 h-28">
+              {status === 'verified' && resultData?.data?.empleado && (
+                <div className="bg-slate-800 border border-slate-600 rounded-xl w-full h-full p-4 flex flex-col justify-center items-center text-white animate-pop-in">
+                  <p className="text-2xl font-bold">
+                    {resultData.data.empleado.nombre}{" "}
+                    {resultData.data.empleado.apellido}
+                  </p>
+                  <div className="mt-2 text-center text-slate-300 font-light">
+                    <p>{resultData.data.empleado.cargo.nombre_cargo}</p>
+                    <p>Turno: {resultData.data.empleado.turno.nombre_turno}</p>
                   </div>
                 </div>
-              );
-            }
-            return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-pulse-opacity" />;
-          })()}
-        </div>
-        <div className="w-full max-w-sm mb-8">
-          <button
-            className={buttonClasses}
-            onClick={handleActivateRecognition}
-            disabled={status !== 'idle'}
-            type="button"
-          >
-            {buttonText}
-          </button>
-        </div>
-        <div className="w-full max-w-md mt-4 h-28">
-          {status === 'verified' && resultData?.data?.empleado && (
-            <div className="bg-slate-800 border border-slate-600 rounded-xl w-full h-full p-4 flex flex-col justify-center items-center text-white animate-pop-in">
-              <p className="text-2xl font-bold">
-                {resultData.data.empleado.nombre}{" "}
-                {resultData.data.empleado.apellido}
-              </p>
-              <div className="mt-2 text-center text-slate-300 font-light">
-                <p>{resultData.data.empleado.cargo.nombre_cargo}</p>
-                <p>Turno: {resultData.data.empleado.turno.nombre_turno}</p>
-              </div>
+              )}
             </div>
-          )}
+            <button
+              type="button"
+              className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-blue-500 hover:bg-blue-600 border-b-4 border-blue-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
+              onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
+            >
+              Ayuda
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          className="w-40 h-8 mt-6 text-sm font-bold rounded-xl text-white bg-blue-500 hover:bg-blue-600 border-b-4 border-blue-700 active:translate-y-1 active:border-b-0 transition-all duration-150"
-          onClick={() => alert('El equipo de Mantenimiento ya fue avisado del problema.')}
-        >
-          Ayuda
-        </button>
       </div>
     </main>
   );
