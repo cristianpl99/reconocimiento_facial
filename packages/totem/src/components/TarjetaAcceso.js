@@ -103,7 +103,7 @@ export const TarjetaAcceso = () => {
           alt="Icono de reconocimiento facial"
           className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 z-20"
         />
-        <div className="relative w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg overflow-hidden" style={{ minHeight: '48rem' }}>
+        <div className="relative w-full max-w-md md:max-w-lg lg:max-w-xl bg-gray-900 rounded-3xl border border-gray-700 shadow-lg overflow-hidden" style={{ height: '48rem' }}>
           {/* Background Layer */}
           {isFeedbackState && lastFrame && (
             <img src={lastFrame} alt="Fondo de reconocimiento" className="absolute inset-0 w-full h-full object-cover grayscale" />
@@ -111,7 +111,7 @@ export const TarjetaAcceso = () => {
           <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${isFeedbackState && lastFrame ? 'bg-opacity-60' : 'bg-opacity-0'}`}></div>
 
           {/* Content Layer */}
-          <div className="relative z-10 p-6 sm:p-8 flex flex-col items-center text-center h-full">
+          <div className="relative z-10 p-6 sm:p-8 flex flex-col items-center text-center h-full justify-between">
             {/* Top Content: This will hold the title and camera view. We add pt-12 to push it down from the top of the card to clear the icon */}
             <div className="w-full pt-12">
               {isFeedbackState ? (
@@ -135,15 +135,13 @@ export const TarjetaAcceso = () => {
                   {status === 'idle' && (
                     <p className="text-gray-400 text-sm mb-4">Por favor, mire a la cámara</p>
                   )}
-                  <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+                  <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)]">
                     {isRecognitionActive ? <CameraFeed ref={cameraRef} /> : <img src={iconoOjoVisor} alt="Visor de cámara" className="w-48 h-48 animate-pulse-opacity" />}
                   </div>
                 </>
               )}
             </div>
 
-            {/* Spacer to push bottom content down */}
-            <div className="flex-grow"></div>
 
             {/* Bottom Content Group */}
             <div className="w-full max-w-sm">
