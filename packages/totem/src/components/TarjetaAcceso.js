@@ -105,30 +105,30 @@ export const TarjetaAcceso = () => {
         <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${isFeedbackState && lastFrame ? 'bg-opacity-60' : 'bg-opacity-0'}`}></div>
 
         {/* Content Layer */}
-        <div className="relative z-10 p-6 sm:p-8 flex flex-col items-center text-center h-full">
-          <img
-            src={iconoOjo}
-            alt="Icono de reconocimiento facial"
-            className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 transform -translate-y-full -translate-y-4"
-          />
-
-          <div className="flex-grow w-full flex flex-col items-center justify-center">
+        <img
+          src={iconoOjo}
+          alt="Icono de reconocimiento facial"
+          className="w-24 h-24 absolute top-0 left-1/2 -translate-x-1/2 transform -translate-y-full -translate-y-4 z-20"
+        />
+        <div className="relative z-10 p-6 sm:p-8 flex flex-col items-center text-center h-full justify-between">
+          {/* Top Content Group */}
+          <div className="w-full">
             {isFeedbackState ? (
-              <div className="animate-pop-in">
+              <div className="animate-pop-in pt-16">
                 {status === 'verified' && (
-                  <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90">
+                  <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90 mx-auto">
                     <CheckIcon className="w-24 h-24 text-white" />
                   </div>
                 )}
                 {(status === 'failed' || status === 'clientError') && (
-                  <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90">
+                  <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90 mx-auto">
                     <FailIcon className="w-24 h-24 text-white" />
                   </div>
                 )}
               </div>
             ) : (
               <>
-                <h1 className="text-2xl md:text-3xl font-bold mb-8">
+                <h1 className="text-2xl md:text-3xl font-bold mb-8 pt-12">
                   Acceso por Reconocimiento Facial
                 </h1>
                 {status === 'idle' && (
@@ -141,7 +141,8 @@ export const TarjetaAcceso = () => {
             )}
           </div>
 
-          <div className="w-full max-w-sm mt-auto">
+          {/* Bottom Content Group */}
+          <div className="w-full max-w-sm">
             <div className="h-16 mb-4">
               <button
                 className={buttonClasses}
