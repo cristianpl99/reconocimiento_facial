@@ -76,7 +76,6 @@ export const Desktop = () => {
           className="w-full max-w-2xl mx-auto flex flex-col items-center text-center mt-16 md:mt-24"
           aria-labelledby="facial-recognition-title"
         >
-          <div className="w-32 h-32 bg-gray-200 rounded-full mb-6"></div>
           <h1
             id="facial-recognition-title"
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-black leading-tight mb-12"
