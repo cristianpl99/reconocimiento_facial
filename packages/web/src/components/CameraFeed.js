@@ -1,8 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 
-export const CameraFeed = () => {
+export const CameraFeed = forwardRef((props, ref) => {
   const videoRef = useRef(null);
   const [error, setError] = useState(null);
+
+  useImperativeHandle(ref, () => ({
+    takeScreenshot: () => {
+      if (!videoRef.current) return null;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+      return canvas.toDataURL("image/png"); // devuelve en base64
+    }
+  }));
 
   useEffect(() => {
     const getCameraStream = async () => {
@@ -51,4 +65,4 @@ export const CameraFeed = () => {
       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
     />
   );
-};
+});
