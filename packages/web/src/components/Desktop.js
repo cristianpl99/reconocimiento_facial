@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
+import iconoPyme from "../assets/icono-pyme.png";
 
 export const Desktop = () => {
   const [isRecognitionActive, setIsRecognitionActive] = useState(false);
@@ -30,13 +31,11 @@ export const Desktop = () => {
   };
 
   return (
-    <main className="bg-white flex justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <main className="bg-hero bg-cover bg-center flex justify-center min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-screen-xl">
         <header className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 md:w-24 md:h-24 bg-gray-200 rounded-full">
-              {/* Image placeholder */}
-            </div>
+            <img src={iconoPyme} alt="Icono PyME" className="w-16 h-16 md:w-24 md:h-24 rounded-full" />
             <div className="flex flex-col">
               <h1 className="text-3xl md:text-4xl font-bold">Foodlab</h1>
               <p className="text-sm md:text-base text-gray-600">PyME Alimenticia</p>
