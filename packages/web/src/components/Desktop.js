@@ -154,8 +154,8 @@ export const Desktop = () => {
               <p className="text-sm md:text-base text-gray-500">PyME Alimenticia</p>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            <div className="relative">
+          <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center gap-4 w-full md:w-auto">
+            <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <UserIcon className="h-5 w-5 text-gray-400" />
               </div>
@@ -167,7 +167,7 @@ export const Desktop = () => {
                 className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
               />
             </div>
-            <div className="relative">
+            <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <LockClosedIcon className="h-5 w-5 text-gray-400" />
               </div>
@@ -218,7 +218,7 @@ export const Desktop = () => {
             >
               Acceso por Reconocimiento Facial
             </h1>
-            <div className="rounded-full w-[400px] h-[400px] flex items-center justify-center animate-pulse border-4 border-blue-400 overflow-hidden mb-8">
+            <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
               {(() => {
                 if (isRecognitionActive) {
                   return <CameraFeed ref={cameraRef} />;
