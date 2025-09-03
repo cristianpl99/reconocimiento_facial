@@ -30,6 +30,13 @@ const LockClosedIcon = ({ className }) => (
   </svg>
 );
 
+const CameraIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 0 1 2-2h.93a2 2 0 0 0 1.664-.89l.812-1.22A2 2 0 0 1 10.07 4h3.86a2 2 0 0 1 1.664.89l.812 1.22A2 2 0 0 0 18.07 7H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+  </svg>
+);
+
 export const Desktop = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -211,7 +218,7 @@ export const Desktop = () => {
             >
               Acceso por Reconocimiento Facial
             </h1>
-            <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
+            <div className="rounded-full w-[400px] h-[400px] flex items-center justify-center animate-pulse border-4 border-blue-400 overflow-hidden mb-8">
               {(() => {
                 if (isRecognitionActive) {
                   return <CameraFeed ref={cameraRef} />;
@@ -235,7 +242,7 @@ export const Desktop = () => {
                     </div>
                   );
                 }
-                return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-24 h-24" />;
+                return <CameraIcon className="w-24 h-24 text-blue-400" />;
               })()}
             </div>
             <button
