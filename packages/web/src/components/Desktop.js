@@ -218,7 +218,7 @@ export const Desktop = () => {
             >
               Acceso por Reconocimiento Facial
             </h1>
-            <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden animate-pulse border-4 border-blue-400">
+            <div className={`w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden border-4 border-blue-400 ${!isRecognitionActive ? 'animate-pulse' : ''}`}>
               {(() => {
                 if (isRecognitionActive) {
                   return <CameraFeed ref={cameraRef} />;
