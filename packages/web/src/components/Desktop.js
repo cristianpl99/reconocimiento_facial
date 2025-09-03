@@ -4,7 +4,7 @@ import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
-import mockProduccion from "../assets/icono-pyme.png";
+import mockProduccion from "../assets/mock_produccion.png";
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
