@@ -18,6 +18,18 @@ const FailIcon = ({ className }) => (
   </svg>
 );
 
+const UserIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zm-4 7a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z" />
+  </svg>
+);
+
+const LockClosedIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z" />
+  </svg>
+);
+
 export const Desktop = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -126,7 +138,7 @@ export const Desktop = () => {
 
   return (
     <main className="bg-hero bg-cover bg-center flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-screen-xl">
+      <div className="w-full max-w-screen-xl flex flex-col items-center">
         <header className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-8">
           <div className="flex items-center gap-4">
             <img src={iconoPyme} alt="Icono PyME" className="w-16 h-16 md:w-24 md:h-24 rounded-full" />
@@ -135,21 +147,32 @@ export const Desktop = () => {
               <p className="text-sm md:text-base text-gray-500">PyME Alimenticia</p>
             </div>
           </div>
-          <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
-            />
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
-            />
+          <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center gap-4 w-full md:w-auto">
+            <h2 className="text-2xl font-bold mb-4">Iniciar sesión</h2>
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <UserIcon className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Usuario"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
+              />
+            </div>
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <LockClosedIcon className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
+              />
+            </div>
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-base rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
