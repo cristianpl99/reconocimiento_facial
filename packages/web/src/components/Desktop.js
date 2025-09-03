@@ -147,9 +147,8 @@ export const Desktop = () => {
               <p className="text-sm md:text-base text-gray-500">PyME Alimenticia</p>
             </div>
           </div>
-          <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center gap-4 w-full md:w-auto">
-            <h2 className="text-2xl font-bold mb-4">Iniciar sesión</h2>
-            <div className="relative w-full">
+          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+            <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <UserIcon className="h-5 w-5 text-gray-400" />
               </div>
@@ -161,7 +160,7 @@ export const Desktop = () => {
                 className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
               />
             </div>
-            <div className="relative w-full">
+            <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <LockClosedIcon className="h-5 w-5 text-gray-400" />
               </div>
