@@ -125,7 +125,7 @@ export const Desktop = () => {
   }
 
   return (
-    <main className="bg-hero bg-cover bg-center flex justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <main className="bg-hero bg-cover bg-center flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-screen-xl">
         <header className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-8">
           <div className="flex items-center gap-4">
@@ -135,7 +135,7 @@ export const Desktop = () => {
               <p className="text-sm md:text-base text-gray-600">PyME Alimenticia</p>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+          <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
             <input
               type="text"
               placeholder="Usuario"
