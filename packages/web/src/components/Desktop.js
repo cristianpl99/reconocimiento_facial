@@ -218,7 +218,7 @@ export const Desktop = () => {
             >
               Acceso por Reconocimiento Facial
             </h1>
-            <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
+            <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden animate-pulse border-4 border-blue-400">
               {(() => {
                 if (isRecognitionActive) {
                   return <CameraFeed ref={cameraRef} />;
@@ -274,6 +274,9 @@ export const Desktop = () => {
             </div>
           </section>
         )}
+        <footer className="text-center text-xs text-gray-500 py-4">
+          <p>Powered by Grupo 9 - LCS - Com1</p>
+        </footer>
       </div>
     </main>
   );
