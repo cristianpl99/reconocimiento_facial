@@ -157,7 +157,7 @@ export const Desktop = () => {
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
             {isLoggedIn ? (
               <>
-                <p className="text-lg font-semibold">Supervisor User prod turno noche</p>
+                <p className="text-lg font-semibold">Supervisor Zac Efron, Id 12345 Turno Mañana</p>
                 <button
                   onClick={handleLogin}
                   className="w-full md:w-auto h-12 px-6 bg-red-600 text-white font-bold text-base rounded-full hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
