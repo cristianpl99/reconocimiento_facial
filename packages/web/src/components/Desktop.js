@@ -155,44 +155,59 @@ export const Desktop = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <UserIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Usuario"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
-              />
-            </div>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <LockClosedIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="password"
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
-              />
-            </div>
-            <button
-              onClick={handleLogin}
-              className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-base rounded-full hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              aria-label={isLoggedIn ? "Salir" : "Ingresar"}
-            >
-              {isLoggedIn ? "Salir" : "Ingresar"}
-            </button>
-            <button
-              onClick={handleHelp}
-              className="text-red-500 hover:underline"
-              aria-label="Ayuda"
-            >
-              Ayuda
-            </button>
+            {isLoggedIn ? (
+              <>
+                <p className="text-lg font-semibold">Supervisor User prod turno noche</p>
+                <button
+                  onClick={handleLogin}
+                  className="w-full md:w-auto h-12 px-6 bg-red-600 text-white font-bold text-base rounded-full hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                  aria-label="Salir"
+                >
+                  Salir
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <UserIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Usuario"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
+                  />
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <LockClosedIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="Contraseña"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-base"
+                  />
+                </div>
+                <button
+                  onClick={handleLogin}
+                  className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-base rounded-full hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                  aria-label="Ingresar"
+                >
+                  Ingresar
+                </button>
+                <button
+                  onClick={handleHelp}
+                  className="text-red-500 hover:underline"
+                  aria-label="Ayuda"
+                >
+                  Ayuda
+                </button>
+              </>
+            )}
           </div>
         </header>
         {isLoggedIn ? (
