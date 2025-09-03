@@ -4,6 +4,7 @@ import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
+import mockProduccion from "../assets/icono-pyme.png";
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -172,6 +173,9 @@ export const Desktop = () => {
               <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción por producto</button>
               <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por turno</button>
               <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
+            </div>
+            <div className="w-full max-w-[1100px] mx-auto mt-8">
+              <img src={mockProduccion} alt="Producción" className="w-full h-auto" />
             </div>
           </section>
         ) : (
