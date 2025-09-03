@@ -137,7 +137,7 @@ export const Desktop = () => {
   }
 
   return (
-    <main className="bg-hero bg-cover bg-center flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <main className="bg-gradient-to-b from-blue-100 to-blue-500 flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-screen-xl flex flex-col items-center">
         <header className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-8">
           <div className="flex items-center gap-4">
