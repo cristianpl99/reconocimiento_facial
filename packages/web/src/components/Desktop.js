@@ -20,6 +20,7 @@ const FailIcon = ({ className }) => (
 export const Desktop = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -57,8 +58,24 @@ export const Desktop = () => {
     }
   };
 
+  const resetState = () => {
+    setUsername("");
+    setPassword("");
+    setIsLoggedIn(false);
+    setStatus('idle');
+    setResultData(null);
+    setLastFrame(null);
+  };
+
   const handleLogin = () => {
-    if (username === "cristian" && password === "123") {
+    if (isLoggedIn) {
+      resetState();
+      return;
+    }
+
+    if (username === "us" && password === "prod") {
+      setIsLoggedIn(true);
+    } else if (username === "cristian" && password === "123") {
       alert("Ingreso Exitoso");
     } else {
       alert("Usuario y/o contraseña invalido");
@@ -135,9 +152,9 @@ export const Desktop = () => {
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              aria-label="Ingresar"
+              aria-label={isLoggedIn ? "Salir" : "Ingresar"}
             >
-              Ingresar
+              {isLoggedIn ? "Salir" : "Ingresar"}
             </button>
             <button
               onClick={handleHelp}
