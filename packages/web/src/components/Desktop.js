@@ -4,6 +4,7 @@ import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
+import mockProduccion from "../assets/mock_produccion.png";
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -20,6 +21,7 @@ const FailIcon = ({ className }) => (
 export const Desktop = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -57,8 +59,24 @@ export const Desktop = () => {
     }
   };
 
+  const resetState = () => {
+    setUsername("");
+    setPassword("");
+    setIsLoggedIn(false);
+    setStatus('idle');
+    setResultData(null);
+    setLastFrame(null);
+  };
+
   const handleLogin = () => {
-    if (username === "cristian" && password === "123") {
+    if (isLoggedIn) {
+      resetState();
+      return;
+    }
+
+    if (username === "user" && password === "prod") {
+      setIsLoggedIn(true);
+    } else if (username === "cristian" && password === "123") {
       alert("Ingreso Exitoso");
     } else {
       alert("Usuario y/o contraseña invalido");
@@ -135,9 +153,9 @@ export const Desktop = () => {
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              aria-label="Ingresar"
+              aria-label={isLoggedIn ? "Salir" : "Ingresar"}
             >
-              Ingresar
+              {isLoggedIn ? "Salir" : "Ingresar"}
             </button>
             <button
               onClick={handleHelp}
@@ -148,71 +166,85 @@ export const Desktop = () => {
             </button>
           </div>
         </header>
-        <section
-          className="w-full max-w-2xl mx-auto flex flex-col items-center text-center mt-16 md:mt-24"
-          aria-labelledby="facial-recognition-title"
-        >
-          <h1
-            id="facial-recognition-title"
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-black leading-tight mb-12"
+        {isLoggedIn ? (
+          <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
+            <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Desperdicio por tipo de producto</button>
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción por producto</button>
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por turno</button>
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
+            </div>
+            <div className="w-full max-w-[1100px] mx-auto mt-8">
+              <img src={mockProduccion} alt="Producción" className="w-full h-auto" />
+            </div>
+          </section>
+        ) : (
+          <section
+            className="w-full max-w-2xl mx-auto flex flex-col items-center text-center mt-16 md:mt-24"
+            aria-labelledby="facial-recognition-title"
           >
-            Acceso por Reconocimiento Facial
-          </h1>
-          <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
-            {(() => {
-              if (isRecognitionActive) {
-                return <CameraFeed ref={cameraRef} />;
-              }
-              if (isFeedbackState && lastFrame) {
-                return (
-                  <div className="relative w-full h-full">
-                    <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
-                      {status === 'verified' && (
-                        <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90">
-                          <CheckIcon className="w-16 h-16 text-white" />
-                        </div>
-                      )}
-                      {(status === 'failed' || status === 'clientError') && (
-                        <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90">
-                          <FailIcon className="w-16 h-16 text-white" />
-                        </div>
-                      )}
+            <h1
+              id="facial-recognition-title"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-black leading-tight mb-12"
+            >
+              Acceso por Reconocimiento Facial
+            </h1>
+            <div className="w-full max-w-lg h-72 bg-gray-200 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
+              {(() => {
+                if (isRecognitionActive) {
+                  return <CameraFeed ref={cameraRef} />;
+                }
+                if (isFeedbackState && lastFrame) {
+                  return (
+                    <div className="relative w-full h-full">
+                      <img src={lastFrame} alt="Último fotograma capturado" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20">
+                        {status === 'verified' && (
+                          <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center bg-opacity-90">
+                            <CheckIcon className="w-16 h-16 text-white" />
+                          </div>
+                        )}
+                        {(status === 'failed' || status === 'clientError') && (
+                          <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center bg-opacity-90">
+                            <FailIcon className="w-16 h-16 text-white" />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
+                  );
+                }
+                return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-24 h-24" />;
+              })()}
+            </div>
+            <button
+              onClick={handleActivateRecognition}
+              className={buttonClasses}
+              disabled={status !== 'idle'}
+              aria-label={
+                isRecognitionActive
+                  ? "Reconocimiento en curso"
+                  : "Activar reconocimiento facial"
               }
-              return <img src={iconoOjoVisor} alt="Visor de cámara" className="w-24 h-24" />;
-            })()}
-          </div>
-          <button
-            onClick={handleActivateRecognition}
-            className={buttonClasses}
-            disabled={status !== 'idle'}
-            aria-label={
-              isRecognitionActive
-                ? "Reconocimiento en curso"
-                : "Activar reconocimiento facial"
-            }
-          >
-            {buttonText}
-          </button>
+            >
+              {buttonText}
+            </button>
 
-          <div className="w-full max-w-md mt-4 h-28">
-            {status === 'verified' && resultData?.data?.empleado && (
-              <div className="bg-gray-100 border border-gray-200 rounded-xl w-full h-full p-4 flex flex-col justify-center items-center text-gray-800">
-                <p className="text-xl font-bold">
-                  {resultData.data.empleado.nombre}{" "}
-                  {resultData.data.empleado.apellido}
-                </p>
-                <div className="mt-1 text-center text-gray-600">
-                  <p>{resultData.data.empleado.cargo.nombre_cargo}</p>
-                  <p>Turno: {resultData.data.empleado.turno.nombre_turno}</p>
+            <div className="w-full max-w-md mt-4 h-28">
+              {status === 'verified' && resultData?.data?.empleado && (
+                <div className="bg-gray-100 border border-gray-200 rounded-xl w-full h-full p-4 flex flex-col justify-center items-center text-gray-800">
+                  <p className="text-xl font-bold">
+                    {resultData.data.empleado.nombre}{" "}
+                    {resultData.data.empleado.apellido}
+                  </p>
+                  <div className="mt-1 text-center text-gray-600">
+                    <p>{resultData.data.empleado.cargo.nombre_cargo}</p>
+                    <p>Turno: {resultData.data.empleado.turno.nombre_turno}</p>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </section>
+              )}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );
