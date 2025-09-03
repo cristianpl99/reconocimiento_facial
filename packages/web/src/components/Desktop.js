@@ -174,14 +174,14 @@ export const Desktop = () => {
             </div>
             <button
               onClick={handleLogin}
-              className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-base rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+              className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-base rounded-full hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
               aria-label={isLoggedIn ? "Salir" : "Ingresar"}
             >
               {isLoggedIn ? "Salir" : "Ingresar"}
             </button>
             <button
               onClick={handleHelp}
-              className="w-full md:w-auto h-12 px-6 bg-red-600 text-white font-bold text-base rounded-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+              className="text-red-500 hover:underline"
               aria-label="Ayuda"
             >
               Ayuda
