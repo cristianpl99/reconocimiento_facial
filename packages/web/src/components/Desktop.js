@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
+import { loginUser } from "../services/authService";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
@@ -68,18 +69,22 @@ export const Desktop = () => {
     setLastFrame(null);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (isLoggedIn) {
       resetState();
       return;
     }
 
-    if (username === "user" && password === "prod") {
-      setIsLoggedIn(true);
-    } else if (username === "cristian" && password === "123") {
-      alert("Ingreso Exitoso");
-    } else {
-      alert("Usuario y/o contraseña invalido");
+    try {
+      const user = await loginUser(username, password);
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        alert("Usuario y/o Contraseña Invalida");
+      }
+    } catch (error) {
+      console.error("Se produjo un error durante el inicio de sesión:", error);
+      alert("Error al intentar iniciar sesión. Por favor, inténtelo de nuevo.");
     }
   };
 
