@@ -195,14 +195,14 @@ export const CreateEmployeeForm = () => {
               <label className="block text-sm font-medium text-gray-600 mb-1">Departamento</label>
               <select name="departamento" value={formData.departamento} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Seleccione un departamento</option>
-                {departamentos.map(dep => <option key={dep.id} value={dep.id}>{dep.nombre}</option>)}
+                {departamentos.map(dep => <option key={dep.pk} value={dep.pk}>{dep.nombre}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-1">Cargo</label>
               <select name="cargo" value={formData.cargo} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Seleccione un cargo</option>
-                {cargos.map(cargo => <option key={cargo.id} value={cargo.id}>{cargo.nombre}</option>)}
+                {cargos.map(cargo => <option key={cargo.pk} value={cargo.pk}>{cargo.nombre}</option>)}
               </select>
             </div>
             <div>
