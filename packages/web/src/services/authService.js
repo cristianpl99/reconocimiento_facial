@@ -13,11 +13,7 @@ export const loginUser = async (username, password) => {
       (employee) => employee.username === username && employee.password === password
     );
 
-    if (foundUser && foundUser.cargo && foundUser.cargo.id_cargo === 1) {
-      return foundUser; // Devuelve el usuario si las credenciales son correctas y el cargo es 1
-    }
-
-    return null; // Devuelve null si el usuario no se encuentra, la contraseña es incorrecta o el cargo no es 1
+    return foundUser || null; // Devuelve el objeto de usuario si las credenciales son correctas, de lo contrario null.
   } catch (error) {
     console.error("Error de red o de parsing al intentar iniciar sesión:", error);
     return null;

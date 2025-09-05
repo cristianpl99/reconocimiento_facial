@@ -77,11 +77,19 @@ export const Desktop = () => {
 
     try {
       const user = await loginUser(username, password);
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        alert("Usuario y/o Contraseña Invalida");
+
+      if (!user) {
+        alert("Usuario y/o Contraseña Inválida");
+        return;
       }
+
+      alert("Ingreso Exitoso");
+
+      if (user.cargo && user.cargo.id_cargo === 1) {
+        setIsLoggedIn(true);
+      }
+      // If cargo is not 1, do nothing else, as per the new flow.
+
     } catch (error) {
       console.error("Se produjo un error durante el inicio de sesión:", error);
       alert("Error al intentar iniciar sesión. Por favor, inténtelo de nuevo.");
