@@ -14,7 +14,8 @@ export const loginUser = async (username, password) => {
     );
 
     return foundUser || null; // Devuelve el objeto de usuario si las credenciales son correctas, de lo contrario null.
-  } catch (error) {
+  } catch (error)
+  {
     console.error("Error de red o de parsing al intentar iniciar sesión:", error);
     return null;
   }
