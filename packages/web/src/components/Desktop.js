@@ -5,6 +5,9 @@ import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
+import { loginUser } from "../services/authService";
+import Swal from 'sweetalert2';
+import { CreateEmployeeForm } from './CreateEmployeeForm';
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -18,13 +21,11 @@ const FailIcon = ({ className }) => (
   </svg>
 );
 
-import { loginUser } from "../services/authService";
-import Swal from 'sweetalert2';
-
 export const Desktop = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -66,17 +67,32 @@ export const Desktop = () => {
     setUsername("");
     setPassword("");
     setIsLoggedIn(false);
+    setIsAdminLoggedIn(false);
     setStatus('idle');
     setResultData(null);
     setLastFrame(null);
   };
 
   const handleLogin = async () => {
-    if (isLoggedIn) {
+    if (isLoggedIn || isAdminLoggedIn) {
       resetState();
       return;
     }
 
+    // Admin login check
+    if (username === 'admin' && password === 'admin') {
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'Inicio de sesión como Administrador.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      setIsAdminLoggedIn(true);
+      return;
+    }
+
+    // Employee login flow
     try {
       const user = await loginUser(username, password);
 
@@ -165,7 +181,7 @@ export const Desktop = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            {!isLoggedIn && (
+            {!isLoggedIn && !isAdminLoggedIn && (
               <>
                 <input
                   type="text"
@@ -186,9 +202,9 @@ export const Desktop = () => {
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              aria-label={isLoggedIn ? "Salir" : "Ingresar"}
+              aria-label={(isLoggedIn || isAdminLoggedIn) ? "Salir" : "Ingresar"}
             >
-              {isLoggedIn ? "Salir" : "Ingresar"}
+              {(isLoggedIn || isAdminLoggedIn) ? "Salir" : "Ingresar"}
             </button>
             <button
               onClick={handleHelp}
@@ -199,7 +215,9 @@ export const Desktop = () => {
             </button>
           </div>
         </header>
-        {isLoggedIn ? (
+
+        {/* Employee View */}
+        {isLoggedIn && (
           <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
             <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
               <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Desperdicio por tipo de producto</button>
@@ -211,7 +229,10 @@ export const Desktop = () => {
               <img src={mockProduccion} alt="Producción" className="w-full h-auto" />
             </div>
           </section>
-        ) : (
+        )}
+
+        {/* Facial Recognition View */}
+        {!isLoggedIn && !isAdminLoggedIn && (
           <section
             className="w-full max-w-2xl mx-auto flex flex-col items-center text-center mt-16 md:mt-24"
             aria-labelledby="facial-recognition-title"
@@ -278,6 +299,12 @@ export const Desktop = () => {
             </div>
           </section>
         )}
+
+        {/* Admin View */}
+        {isAdminLoggedIn && (
+          <CreateEmployeeForm />
+        )}
+
       </div>
     </main>
   );
