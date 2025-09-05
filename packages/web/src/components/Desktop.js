@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
+import { loginUser } from "../services/authService";
+import Swal from 'sweetalert2';
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
@@ -68,18 +70,44 @@ export const Desktop = () => {
     setLastFrame(null);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (isLoggedIn) {
       resetState();
       return;
     }
 
-    if (username === "user" && password === "prod") {
-      setIsLoggedIn(true);
-    } else if (username === "cristian" && password === "123") {
-      alert("Ingreso Exitoso");
-    } else {
-      alert("Usuario y/o contraseña invalido");
+    try {
+      const user = await loginUser(username, password);
+
+      if (!user) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Usuario y/o Contraseña Inválida',
+          icon: 'error',
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'Ingreso Exitoso',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      if (user.cargo && user.cargo.id_cargo === 1) {
+        setIsLoggedIn(true);
+      }
+      // If cargo is not 1, do nothing else, as per the new flow.
+
+    } catch (error) {
+      console.error("Se produjo un error durante el inicio de sesión:", error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Error al intentar iniciar sesión. Por favor, inténtelo de nuevo.',
+        icon: 'error',
+      });
     }
   };
 
@@ -136,20 +164,24 @@ export const Desktop = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
+            {!isLoggedIn && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Usuario"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </>
+            )}
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
