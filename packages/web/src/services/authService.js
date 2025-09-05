@@ -7,6 +7,7 @@ export const loginUser = async (username, password) => {
     }
 
     const employees = await response.json();
+    console.log("Datos de empleados recibidos del backend:", employees);
 
     const foundUser = employees.find(
       (employee) => employee.username === username && employee.password === password
