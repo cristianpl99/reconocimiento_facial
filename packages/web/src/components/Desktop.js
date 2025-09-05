@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
-import { loginUser } from "../services/authService";
-import Swal from 'sweetalert2';
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
@@ -19,6 +17,9 @@ const FailIcon = ({ className }) => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
   </svg>
 );
+
+import { loginUser } from "../services/authService";
+import Swal from 'sweetalert2';
 
 export const Desktop = () => {
   const [username, setUsername] = useState("");
