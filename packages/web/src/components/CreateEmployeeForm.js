@@ -27,10 +27,8 @@ export const CreateEmployeeForm = () => {
     const loadData = async () => {
       try {
         const deps = await getDepartamentos();
-        console.log('Departamentos recibidos de la API:', deps);
         setDepartamentos(deps);
         const cgs = await getCargos();
-        console.log('Cargos recibidos de la API:', cgs);
         setCargos(cgs);
       } catch (error) {
         Swal.fire('Error', 'No se pudieron cargar los datos de departamentos y cargos.', 'error');
@@ -197,14 +195,14 @@ export const CreateEmployeeForm = () => {
               <label className="block text-sm font-medium text-gray-600 mb-1">Departamento</label>
               <select name="departamento" value={formData.departamento} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Seleccione un departamento</option>
-                {departamentos.map(dep => <option key={dep.pk} value={dep.pk}>{dep.nombre}</option>)}
+                {departamentos.map(dep => <option key={dep.id_departamento} value={dep.id_departamento}>{dep.nombre_departamento}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-1">Cargo</label>
               <select name="cargo" value={formData.cargo} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 <option value="">Seleccione un cargo</option>
-                {cargos.map(cargo => <option key={cargo.pk} value={cargo.pk}>{cargo.nombre}</option>)}
+                {cargos.map(cargo => <option key={cargo.id_cargo} value={cargo.id_cargo}>{cargo.nombre_cargo}</option>)}
               </select>
             </div>
             <div>
