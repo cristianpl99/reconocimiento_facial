@@ -20,6 +20,7 @@ const FailIcon = ({ className }) => (
 
 import { loginUser } from "../services/authService";
 import Swal from 'sweetalert2';
+import { CreateEmployeeForm } from './CreateEmployeeForm';
 
 export const Desktop = () => {
   const [username, setUsername] = useState("");
@@ -300,11 +301,9 @@ export const Desktop = () => {
           </section>
         )}
 
-        {/* Admin View (currently empty) */}
+        {/* Admin View */}
         {isAdminLoggedIn && (
-          <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
-            {/* Admin content will go here in the next step */}
-          </section>
+          <CreateEmployeeForm />
         )}
 
       </div>
