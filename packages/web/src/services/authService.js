@@ -13,7 +13,7 @@ export const loginUser = async (username, password) => {
       (employee) => employee.username === username && employee.password === password
     );
 
-    if (foundUser && foundUser.cargo === 1) {
+    if (foundUser && foundUser.cargo && foundUser.cargo.id_cargo === 1) {
       return foundUser; // Devuelve el usuario si las credenciales son correctas y el cargo es 1
     }
 
