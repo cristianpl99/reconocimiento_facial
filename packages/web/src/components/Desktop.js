@@ -3,6 +3,7 @@ import { CameraFeed } from "./CameraFeed";
 import { Spinner } from "./Spinner";
 import { startFaceIdentification } from "../services/faceRecognitionService";
 import { loginUser } from "../services/authService";
+import Swal from 'sweetalert2';
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
@@ -79,11 +80,21 @@ export const Desktop = () => {
       const user = await loginUser(username, password);
 
       if (!user) {
-        alert("Usuario y/o Contraseña Inválida");
+        Swal.fire({
+          title: 'Error',
+          text: 'Usuario y/o Contraseña Inválida',
+          icon: 'error',
+        });
         return;
       }
 
-      alert("Ingreso Exitoso");
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'Ingreso Exitoso',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
       if (user.cargo && user.cargo.id_cargo === 1) {
         setIsLoggedIn(true);
@@ -92,7 +103,11 @@ export const Desktop = () => {
 
     } catch (error) {
       console.error("Se produjo un error durante el inicio de sesión:", error);
-      alert("Error al intentar iniciar sesión. Por favor, inténtelo de nuevo.");
+      Swal.fire({
+        title: 'Error',
+        text: 'Error al intentar iniciar sesión. Por favor, inténtelo de nuevo.',
+        icon: 'error',
+      });
     }
   };
 
@@ -149,20 +164,24 @@ export const Desktop = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
+            {!isLoggedIn && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Usuario"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </>
+            )}
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
