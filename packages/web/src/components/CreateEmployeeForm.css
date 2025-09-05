@@ -1,0 +1,65 @@
+/* Container for the floating label input */
+.floating-label-group {
+  position: relative;
+}
+
+/* Base styles for the input field to make space for icon and look good */
+.floating-label-input {
+  padding-top: 1.5rem; /* Extra padding for the label to float into */
+  padding-bottom: 0.5rem;
+  padding-left: 2.5rem; /* Space for the icon */
+}
+
+/* The label itself */
+.floating-label {
+  position: absolute;
+  pointer-events: none;
+  left: 2.5rem; /* Align with text start */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280; /* gray-500 */
+  transition: all 0.2s ease-out;
+}
+
+/* The icon inside the input */
+.floating-label-icon {
+  position: absolute;
+  left: 0.75rem; /* p-3 */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af; /* gray-400 */
+  transition: color 0.2s ease-out;
+}
+
+/* This is the magic part: when the input is focused or has a value (placeholder is not shown) */
+.floating-label-input:focus ~ .floating-label,
+.floating-label-input:not(:placeholder-shown) ~ .floating-label {
+  top: 0.5rem;
+  transform: translateY(0);
+  font-size: 0.75rem; /* text-xs */
+  color: #3b82f6; /* blue-500 */
+  background-color: white;
+  padding: 0 0.25rem;
+}
+
+/* Change icon color on focus */
+.floating-label-input:focus ~ .floating-label-icon {
+  color: #3b82f6; /* blue-500 */
+}
+
+/* Error state for the input border */
+.input-error {
+  border-color: #ef4444; /* red-500 */
+}
+
+.input-error:focus {
+    border-color: #ef4444; /* red-500 */
+    --tw-ring-color: #ef4444; /* red-500 */
+}
+
+/* Style for the error message text */
+.error-message {
+  color: #ef4444; /* red-500 */
+  font-size: 0.875rem; /* text-sm */
+  margin-top: 0.25rem;
+}
