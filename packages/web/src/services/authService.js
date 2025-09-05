@@ -1,6 +1,6 @@
 export const loginUser = async (username, password) => {
   try {
-    const response = await fetch("https://face-api-latest.onrender.com/api/ingreso-face/empleados");
+    const response = await fetch("https://face-api-latest.onrender.com/api/empleados");
     if (!response.ok) {
       console.error("Error al obtener la lista de empleados. Status:", response.status);
       return null;
