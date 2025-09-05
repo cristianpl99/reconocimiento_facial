@@ -27,8 +27,10 @@ export const CreateEmployeeForm = () => {
     const loadData = async () => {
       try {
         const deps = await getDepartamentos();
+        console.log('Departamentos recibidos de la API:', deps);
         setDepartamentos(deps);
         const cgs = await getCargos();
+        console.log('Cargos recibidos de la API:', cgs);
         setCargos(cgs);
       } catch (error) {
         Swal.fire('Error', 'No se pudieron cargar los datos de departamentos y cargos.', 'error');
