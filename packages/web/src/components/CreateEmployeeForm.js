@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { createEmployee } from '../services/employeeService';
+import { getDepartamentos, getCargos } from '../services/dataService';
 import './CreateEmployeeForm.css'; // Import custom CSS
 import { FaUser, FaIdCard, FaCalendarAlt, FaKey, FaDollarSign, FaBuilding, FaBriefcase, FaClock } from 'react-icons/fa';
 
@@ -12,13 +13,29 @@ export const CreateEmployeeForm = () => {
     username: '',
     password: '',
     salario: '',
-    departamento: 1,
-    cargo: 1,
+    departamento: '',
+    cargo: '',
     turno: 1,
     imagen_base64: '',
   });
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
+  const [departamentos, setDepartamentos] = useState([]);
+  const [cargos, setCargos] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const deps = await getDepartamentos();
+        setDepartamentos(deps);
+        const cgs = await getCargos();
+        setCargos(cgs);
+      } catch (error) {
+        Swal.fire('Error', 'No se pudieron cargar los datos de departamentos y cargos.', 'error');
+      }
+    };
+    loadData();
+  }, []);
 
   const validateField = (name, value) => {
     if (!value) {
@@ -75,8 +92,15 @@ export const CreateEmployeeForm = () => {
         return;
     }
 
+    // Ensure the date is in YYYY-MM-DD format, handling potential timezone issues.
+    const date = new Date(formData.fecha_contratacion);
+    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+    const correctedDate = new Date(date.getTime() + userTimezoneOffset);
+    const formattedDate = correctedDate.toISOString().split('T')[0];
+
     const employeeData = {
       ...formData,
+      fecha_contratacion: formattedDate,
       salario: parseFloat(formData.salario),
       departamento: parseInt(formData.departamento, 10),
       cargo: parseInt(formData.cargo, 10),
@@ -89,7 +113,7 @@ export const CreateEmployeeForm = () => {
       Swal.fire('¡Éxito!', 'Empleado creado correctamente.', 'success');
       setFormData({
         nombre: '', apellido: '', fecha_contratacion: '', username: '',
-        password: '', salario: '', departamento: 1, cargo: 1, turno: 1, imagen_base64: '',
+        password: '', salario: '', departamento: '', cargo: '', turno: 1, imagen_base64: '',
       });
       setImagePreview(null);
       setErrors({});
@@ -170,13 +194,15 @@ export const CreateEmployeeForm = () => {
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-1">Departamento</label>
               <select name="departamento" value={formData.departamento} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{`Departamento ${n}`}</option>)}
+                <option value="">Seleccione un departamento</option>
+                {departamentos.map(dep => <option key={dep.id} value={dep.id}>{dep.nombre}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-1">Cargo</label>
               <select name="cargo" value={formData.cargo} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{`Cargo ${n}`}</option>)}
+                <option value="">Seleccione un cargo</option>
+                {cargos.map(cargo => <option key={cargo.id} value={cargo.id}>{cargo.nombre}</option>)}
               </select>
             </div>
             <div>
