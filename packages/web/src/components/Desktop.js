@@ -5,6 +5,9 @@ import { startFaceIdentification } from "../services/faceRecognitionService";
 import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
+import { loginUser } from "../services/authService";
+import Swal from 'sweetalert2';
+import { CreateEmployeeForm } from './CreateEmployeeForm';
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -17,10 +20,6 @@ const FailIcon = ({ className }) => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
   </svg>
 );
-
-import { loginUser } from "../services/authService";
-import Swal from 'sweetalert2';
-import { CreateEmployeeForm } from './CreateEmployeeForm';
 
 export const Desktop = () => {
   const [username, setUsername] = useState("");
