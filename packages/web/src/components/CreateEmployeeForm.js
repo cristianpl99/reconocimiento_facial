@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { createEmployee } from '../services/employeeService';
-import { getDepartamentos, getCargos, getTurnos } from '../services/dataService';
+import { getDepartamentos, getCargos } from '../services/dataService';
 import './CreateEmployeeForm.css'; // Import custom CSS
 import { FaUser, FaIdCard, FaCalendarAlt, FaKey, FaDollarSign, FaBuilding, FaBriefcase, FaClock } from 'react-icons/fa';
 
@@ -15,14 +15,13 @@ export const CreateEmployeeForm = () => {
     salario: '',
     departamento: '',
     cargo: '',
-    turno: '',
+    turno: 1,
     imagen_base64: '',
   });
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [departamentos, setDepartamentos] = useState([]);
   const [cargos, setCargos] = useState([]);
-  const [turnos, setTurnos] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -31,10 +30,8 @@ export const CreateEmployeeForm = () => {
         setDepartamentos(deps);
         const cgs = await getCargos();
         setCargos(cgs);
-        const trns = await getTurnos();
-        setTurnos(trns);
       } catch (error) {
-        Swal.fire('Error', 'No se pudieron cargar los datos de departamentos, cargos y turnos.', 'error');
+        Swal.fire('Error', 'No se pudieron cargar los datos de departamentos y cargos.', 'error');
       }
     };
     loadData();
@@ -116,7 +113,7 @@ export const CreateEmployeeForm = () => {
       Swal.fire('¡Éxito!', 'Empleado creado correctamente.', 'success');
       setFormData({
         nombre: '', apellido: '', fecha_contratacion: '', username: '',
-        password: '', salario: '', departamento: '', cargo: '', turno: '', imagen_base64: '',
+        password: '', salario: '', departamento: '', cargo: '', turno: 1, imagen_base64: '',
       });
       setImagePreview(null);
       setErrors({});
@@ -211,8 +208,7 @@ export const CreateEmployeeForm = () => {
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-1">Turno</label>
               <select name="turno" value={formData.turno} onChange={handleInputChange} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                <option value="">Seleccione un turno</option>
-                {turnos.map(turno => <option key={turno.id_turno} value={turno.id_turno}>{turno.nombre_turno}</option>)}
+                {[1, 2, 3].map(n => <option key={n} value={n}>{`Turno ${n}`}</option>)}
               </select>
             </div>
           </div>
