@@ -56,6 +56,12 @@ export const Desktop = () => {
 
     if (result.verified) {
       setStatus('verified');
+      const user = result.data.empleado;
+      if (user.departamento.nombre_departamento === 'Administracion' && user.cargo.nombre_cargo === 'Administrador') {
+        setIsAdminLoggedIn(true);
+      } else {
+        setIsLoggedIn(true);
+      }
     } else if (result.error === 'ClientError') {
       setStatus('clientError');
     } else {
@@ -79,20 +85,6 @@ export const Desktop = () => {
       return;
     }
 
-    // Admin login check
-    if (username === 'admin' && password === 'admin') {
-      Swal.fire({
-        title: '¡Éxito!',
-        text: 'Inicio de sesión como Administrador.',
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      setIsAdminLoggedIn(true);
-      return;
-    }
-
-    // Employee login flow
     try {
       const user = await loginUser(username, password);
 
@@ -113,10 +105,11 @@ export const Desktop = () => {
         showConfirmButton: false,
       });
 
-      if (user.cargo && user.cargo.id_cargo === 1) {
+      if (user.departamento.nombre_departamento === 'Administracion' && user.cargo.nombre_cargo === 'Administrador') {
+        setIsAdminLoggedIn(true);
+      } else {
         setIsLoggedIn(true);
       }
-      // If cargo is not 1, do nothing else, as per the new flow.
 
     } catch (error) {
       console.error("Se produjo un error durante el inicio de sesión:", error);
