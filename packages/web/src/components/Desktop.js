@@ -27,6 +27,7 @@ export const Desktop = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [isHrLoggedIn, setIsHrLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -59,6 +60,7 @@ export const Desktop = () => {
       setStatus('verified');
       setTimeout(() => {
         const user = result.data.empleado;
+        setCurrentUser(user);
         if (user.departamento.nombre_departamento === 'Administración' && user.cargo.nombre_cargo === 'Administrador') {
           setIsAdminLoggedIn(true);
         } else if (user.departamento.nombre_departamento === 'Producción' && user.cargo.nombre_cargo === 'Gerente') {
@@ -80,6 +82,7 @@ export const Desktop = () => {
     setIsLoggedIn(false);
     setIsAdminLoggedIn(false);
     setIsHrLoggedIn(false);
+    setCurrentUser(null);
     setStatus('idle');
     setResultData(null);
     setLastFrame(null);
@@ -111,6 +114,7 @@ export const Desktop = () => {
         showConfirmButton: false,
       });
 
+      setCurrentUser(user);
       if (user.departamento.nombre_departamento === 'Administración' && user.cargo.nombre_cargo === 'Administrador') {
         setIsAdminLoggedIn(true);
       } else if (user.departamento.nombre_departamento === 'Producción' && user.cargo.nombre_cargo === 'Gerente') {
@@ -205,6 +209,12 @@ export const Desktop = () => {
                   className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </>
+            )}
+            {currentUser && (
+              <div className="text-right">
+                <p className="font-bold">{currentUser.nombre} {currentUser.apellido}</p>
+                <p className="text-sm text-gray-600">{currentUser.cargo.nombre_cargo} de {currentUser.departamento.nombre_departamento}</p>
+              </div>
             )}
             <button
               onClick={handleLogin}
