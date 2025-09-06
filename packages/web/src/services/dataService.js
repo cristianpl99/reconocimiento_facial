@@ -20,6 +20,16 @@ export const getDepartamentos = async () => {
   }
 };
 
+export const getHrMetrics = async () => {
+  try {
+    const response = await fetch(`https://face-api-latest.onrender.com/produccion/metricas/`);
+    return await handleResponse(response);
+  } catch (error) {
+    console.error("Error al obtener las métricas de RRHH:", error);
+    throw error;
+  }
+};
+
 export const getCargos = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/cargos/`);
