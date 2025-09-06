@@ -26,6 +26,7 @@ export const Desktop = () => {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isHrLoggedIn, setIsHrLoggedIn] = useState(false);
 
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
   const [resultData, setResultData] = useState(null);
@@ -62,6 +63,8 @@ export const Desktop = () => {
           setIsAdminLoggedIn(true);
         } else if (user.departamento.nombre_departamento === 'Producción' && user.cargo.nombre_cargo === 'Gerente') {
           setIsLoggedIn(true);
+        } else if (user.departamento.nombre_departamento === 'Recursos Humanos' && user.cargo.nombre_cargo === 'Gerente') {
+          setIsHrLoggedIn(true);
         }
       }, 2000);
     } else if (result.error === 'ClientError') {
@@ -76,6 +79,7 @@ export const Desktop = () => {
     setPassword("");
     setIsLoggedIn(false);
     setIsAdminLoggedIn(false);
+    setIsHrLoggedIn(false);
     setStatus('idle');
     setResultData(null);
     setLastFrame(null);
@@ -111,6 +115,8 @@ export const Desktop = () => {
         setIsAdminLoggedIn(true);
       } else if (user.departamento.nombre_departamento === 'Producción' && user.cargo.nombre_cargo === 'Gerente') {
         setIsLoggedIn(true);
+      } else if (user.departamento.nombre_departamento === 'Recursos Humanos' && user.cargo.nombre_cargo === 'Gerente') {
+        setIsHrLoggedIn(true);
       } else {
         Swal.fire({
           title: 'Acceso Denegado',
@@ -182,7 +188,7 @@ export const Desktop = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            {!isLoggedIn && !isAdminLoggedIn && (
+            {!isLoggedIn && !isAdminLoggedIn && !isHrLoggedIn && (
               <>
                 <input
                   type="text"
@@ -203,9 +209,9 @@ export const Desktop = () => {
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              aria-label={(isLoggedIn || isAdminLoggedIn) ? "Salir" : "Ingresar"}
+              aria-label={(isLoggedIn || isAdminLoggedIn || isHrLoggedIn) ? "Salir" : "Ingresar"}
             >
-              {(isLoggedIn || isAdminLoggedIn) ? "Salir" : "Ingresar"}
+              {(isLoggedIn || isAdminLoggedIn || isHrLoggedIn) ? "Salir" : "Ingresar"}
             </button>
             <button
               onClick={handleHelp}
@@ -233,7 +239,7 @@ export const Desktop = () => {
         )}
 
         {/* Facial Recognition View */}
-        {!isLoggedIn && !isAdminLoggedIn && (
+        {!isLoggedIn && !isAdminLoggedIn && !isHrLoggedIn && (
           <section
             className="w-full max-w-2xl mx-auto flex flex-col items-center text-center mt-16 md:mt-24"
             aria-labelledby="facial-recognition-title"
@@ -304,6 +310,21 @@ export const Desktop = () => {
         {/* Admin View */}
         {isAdminLoggedIn && (
           <CreateEmployeeForm />
+        )}
+
+        {/* HR View */}
+        {isHrLoggedIn && (
+          <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
+            <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Distribucion Salarios</button>
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por Turnos</button>
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia Promedio por Empleados</button>
+              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Empleados por Departamento</button>
+            </div>
+            <div className="w-full max-w-[1100px] mx-auto mt-8">
+              <img src={mockProduccion} alt="Producción" className="w-full h-auto" />
+            </div>
+          </section>
         )}
 
       </div>
