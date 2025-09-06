@@ -20,6 +20,16 @@ export const getDepartamentos = async () => {
   }
 };
 
+export const getTurnos = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/turnos/`);
+    return await handleResponse(response);
+  } catch (error) {
+    console.error("Error al obtener turnos:", error);
+    throw error;
+  }
+};
+
 export const getHrMetrics = async () => {
   try {
     const response = await fetch(`https://face-api-latest.onrender.com/produccion/metricas/`);
