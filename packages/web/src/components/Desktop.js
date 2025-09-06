@@ -228,9 +228,16 @@ export const Desktop = () => {
               </>
             )}
             {currentUser && (
-              <div className="text-right">
-                <p className="font-bold">{currentUser.nombre} {currentUser.apellido}</p>
-                <p className="text-sm text-gray-600">{currentUser.cargo.nombre_cargo} de {currentUser.departamento.nombre_departamento}</p>
+              <div className="flex items-center gap-4">
+                <img
+                  src={`data:image/jpeg;base64,${currentUser.imagen_base64}`}
+                  alt="Foto de perfil"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div className="text-right">
+                  <p className="font-bold">{currentUser.nombre} {currentUser.apellido}</p>
+                  <p className="text-sm text-gray-600">{currentUser.cargo.nombre_cargo} de {currentUser.departamento.nombre_departamento}</p>
+                </div>
               </div>
             )}
             <button
