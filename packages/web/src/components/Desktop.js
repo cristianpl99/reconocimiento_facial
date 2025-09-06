@@ -60,7 +60,7 @@ export const Desktop = () => {
         const user = result.data.empleado;
         if (user.departamento.nombre_departamento === 'Administración' && user.cargo.nombre_cargo === 'Administrador') {
           setIsAdminLoggedIn(true);
-        } else {
+        } else if (user.departamento.nombre_departamento === 'Producción' && user.cargo.nombre_cargo === 'Gerente') {
           setIsLoggedIn(true);
         }
       }, 2000);
@@ -109,8 +109,14 @@ export const Desktop = () => {
 
       if (user.departamento.nombre_departamento === 'Administración' && user.cargo.nombre_cargo === 'Administrador') {
         setIsAdminLoggedIn(true);
-      } else {
+      } else if (user.departamento.nombre_departamento === 'Producción' && user.cargo.nombre_cargo === 'Gerente') {
         setIsLoggedIn(true);
+      } else {
+        Swal.fire({
+          title: 'Acceso Denegado',
+          text: 'No tienes permiso para acceder a este sistema.',
+          icon: 'error',
+        });
       }
 
     } catch (error) {
