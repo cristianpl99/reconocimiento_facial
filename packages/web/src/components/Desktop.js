@@ -56,12 +56,14 @@ export const Desktop = () => {
 
     if (result.verified) {
       setStatus('verified');
-      const user = result.data.empleado;
-      if (user.departamento.nombre_departamento === 'Administracion' && user.cargo.nombre_cargo === 'Administrador') {
-        setIsAdminLoggedIn(true);
-      } else {
-        setIsLoggedIn(true);
-      }
+      setTimeout(() => {
+        const user = result.data.empleado;
+        if (user.departamento.nombre_departamento === 'Administración' && user.cargo.nombre_cargo === 'Administrador') {
+          setIsAdminLoggedIn(true);
+        } else {
+          setIsLoggedIn(true);
+        }
+      }, 2000);
     } else if (result.error === 'ClientError') {
       setStatus('clientError');
     } else {
@@ -105,7 +107,7 @@ export const Desktop = () => {
         showConfirmButton: false,
       });
 
-      if (user.departamento.nombre_departamento === 'Administracion' && user.cargo.nombre_cargo === 'Administrador') {
+      if (user.departamento.nombre_departamento === 'Administración' && user.cargo.nombre_cargo === 'Administrador') {
         setIsAdminLoggedIn(true);
       } else {
         setIsLoggedIn(true);
