@@ -232,7 +232,7 @@ export const Desktop = () => {
                 <img
                   src={`data:image/jpeg;base64,${currentUser.imagen_base64}`}
                   alt="Foto de perfil"
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-24 h-24 rounded-full object-cover"
                 />
                 <div className="text-right">
                   <p className="font-bold">{currentUser.nombre} {currentUser.apellido}</p>
