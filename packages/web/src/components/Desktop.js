@@ -89,7 +89,7 @@ export const Desktop = () => {
   };
 
   const handleLogin = async () => {
-    if (isLoggedIn || isAdminLoggedIn) {
+    if (isLoggedIn || isAdminLoggedIn || isHrLoggedIn) {
       resetState();
       return;
     }
