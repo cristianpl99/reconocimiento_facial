@@ -6,10 +6,10 @@ import iconoOjoVisor from "../assets/icono-ojo-visor.png";
 import iconoPyme from "../assets/icono-pyme.png";
 import mockProduccion from "../assets/mock_produccion.png";
 import { loginUser } from "../services/authService";
-import { getHrMetrics } from "../services/dataService";
 import Swal from 'sweetalert2';
 import { CreateEmployeeForm } from './CreateEmployeeForm';
 import { OperarioView } from '../views/OperarioView';
+import { HrView } from '../views/HrView';
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -36,8 +36,6 @@ export const Desktop = () => {
   const [resultData, setResultData] = useState(null);
   const [lastFrame, setLastFrame] = useState(null);
   const cameraRef = useRef();
-  const [hrMetrics, setHrMetrics] = useState(null);
-  const [displayImage, setDisplayImage] = useState(null);
 
   useEffect(() => {
     if (status === 'verified' || status === 'failed' || status === 'clientError') {
@@ -48,20 +46,6 @@ export const Desktop = () => {
       return () => clearTimeout(timer);
     }
   }, [status]);
-
-  useEffect(() => {
-    if (isHrLoggedIn) {
-      const fetchHrMetrics = async () => {
-        try {
-          const metrics = await getHrMetrics();
-          setHrMetrics(metrics);
-        } catch (error) {
-          Swal.fire('Error', 'No se pudieron cargar las métricas de RRHH.', 'error');
-        }
-      };
-      fetchHrMetrics();
-    }
-  }, [isHrLoggedIn]);
 
   const handleActivateRecognition = async () => {
     if (status !== 'idle') return;
@@ -360,17 +344,7 @@ export const Desktop = () => {
 
         {/* HR View */}
         {isHrLoggedIn && (
-          <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
-            <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
-              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${hrMetrics.distribucion_salarios}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Distribucion Salarios</button>
-              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${hrMetrics.salario_promedio_por_departamento}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Salario Promedio por Departamento</button>
-              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${hrMetrics.empleados_por_turno}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Empleados por Turno</button>
-              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${hrMetrics.empleados_por_departamento}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Empleados por Departamento</button>
-            </div>
-            <div className="w-full max-w-[1100px] mx-auto mt-8">
-              {displayImage && <img src={displayImage} alt="Métrica de RRHH" className="w-full h-auto" />}
-            </div>
-          </section>
+          <HrView />
         )}
 
       </div>
