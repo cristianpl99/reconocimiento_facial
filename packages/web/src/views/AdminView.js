@@ -7,14 +7,31 @@ export const AdminView = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchIngresos = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('https://face-api-latest.onrender.com/api/ingresos-egresos/');
-        if (!response.ok) {
+        const [ingresosResponse, empleadosResponse] = await Promise.all([
+          fetch('https://face-api-latest.onrender.com/api/ingresos-egresos/'),
+          fetch('https://face-api-latest.onrender.com/api/empleados/')
+        ]);
+
+        if (!ingresosResponse.ok || !empleadosResponse.ok) {
           throw new Error('Error al obtener los datos');
         }
-        const data = await response.json();
-        setIngresos(data);
+
+        const ingresosData = await ingresosResponse.json();
+        const empleadosData = await empleadosResponse.json();
+
+        const empleadosMap = new Map(empleadosData.map(emp => [emp.id_empleado, emp]));
+
+        const mergedData = ingresosData.map(ingreso => ({
+          ...ingreso,
+          empleado: {
+            ...ingreso.empleado,
+            ...empleadosMap.get(ingreso.empleado.id_empleado)
+          }
+        }));
+
+        setIngresos(mergedData);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -22,7 +39,7 @@ export const AdminView = () => {
       }
     };
 
-    fetchIngresos();
+    fetchData();
   }, []);
 
   return (
@@ -33,20 +50,24 @@ export const AdminView = () => {
       </div>
 
       {/* Right side: List of entries */}
-      <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-lg">
+      <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-lg flex flex-col" style={{ height: 'fit-content' }}>
         <h2 className="text-2xl font-bold mb-4">Ingresos y Egresos</h2>
         {loading && <p>Cargando...</p>}
         {error && <p className="text-red-500">{error}</p>}
         {!loading && !error && (
-          <ul className="divide-y divide-gray-200">
-            {ingresos.map(ingreso => (
-              <li key={ingreso.id} className="py-4">
-                <p><span className="font-semibold">ID Empleado:</span> {ingreso.empleado.id_empleado}</p>
-                <p><span className="font-semibold">Ingreso:</span> {new Date(ingreso.ingreso).toLocaleString()}</p>
-                <p><span className="font-semibold">Egreso:</span> {ingreso.egreso ? new Date(ingreso.egreso).toLocaleString() : 'N/A'}</p>
-              </li>
-            ))}
-          </ul>
+          <div className="overflow-y-auto">
+            <ul className="divide-y divide-gray-200">
+              {ingresos.map(ingreso => (
+                <li key={ingreso.id} className="py-4">
+                  <p><span className="font-semibold">ID Empleado:</span> {ingreso.empleado.id_empleado}</p>
+                  <p><span className="font-semibold">Nombre:</span> {ingreso.empleado.nombre} {ingreso.empleado.apellido}</p>
+                  <p><span className="font-semibold">Departamento:</span> {ingreso.empleado.departamento.nombre_departamento}</p>
+                  <p><span className="font-semibold">Ingreso:</span> {new Date(ingreso.ingreso).toLocaleString()}</p>
+                  <p><span className="font-semibold">Egreso:</span> {ingreso.egreso ? new Date(ingreso.egreso).toLocaleString() : 'N/A'}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </section>
