@@ -111,7 +111,7 @@ export const Desktop = () => {
   };
 
   const handleLogin = async () => {
-    if (isLoggedIn || isAdminLoggedIn || isHrLoggedIn) {
+    if (isLoggedIn || isAdminLoggedIn || isHrLoggedIn || isOperarioLoggedIn) {
       resetState();
       return;
     }
