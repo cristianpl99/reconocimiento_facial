@@ -38,6 +38,7 @@ export const Desktop = () => {
   const [lastFrame, setLastFrame] = useState(null);
   const cameraRef = useRef();
   const [hrMetrics, setHrMetrics] = useState(null);
+  const [produccionMetrics, setProduccionMetrics] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
 
   useEffect(() => {
@@ -62,7 +63,18 @@ export const Desktop = () => {
       };
       fetchHrMetrics();
     }
-  }, [isHrLoggedIn]);
+    if (isLoggedIn) {
+      const fetchProduccionMetrics = async () => {
+        try {
+          const metrics = await getHrMetrics(); // Assuming this fetches all metrics
+          setProduccionMetrics(metrics);
+        } catch (error) {
+          Swal.fire('Error', 'No se pudieron cargar las métricas de Producción.', 'error');
+        }
+      };
+      fetchProduccionMetrics();
+    }
+  }, [isHrLoggedIn, isLoggedIn]);
 
   const handleActivateRecognition = async () => {
     if (status !== 'idle') return;
@@ -266,16 +278,16 @@ export const Desktop = () => {
         </header>
 
         {/* Employee View */}
-        {isLoggedIn && (
+        {isLoggedIn && produccionMetrics && (
           <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
             <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Desperdicio por tipo de producto</button>
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción por producto</button>
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por turno</button>
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.desperdicio_por_tipo_de_producto}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Desperdicio por tipo de producto</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.produccion_por_producto}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción por producto</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.eficiencia_por_turno}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por turno</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.produccion_real_vs_objetivo_diario}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
             </div>
             <div className="w-full max-w-[1100px] mx-auto mt-8">
-              <img src={mockProduccion} alt="Producción" className="w-full h-auto" />
+              {displayImage ? <img src={displayImage} alt="Métrica de Producción" className="w-full h-auto" /> : <img src={mockProduccion} alt="Producción" className="w-full h-auto" />}
             </div>
           </section>
         )}
