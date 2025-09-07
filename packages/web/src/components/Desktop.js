@@ -9,6 +9,7 @@ import { loginUser } from "../services/authService";
 import { getHrMetrics } from "../services/dataService";
 import Swal from 'sweetalert2';
 import { CreateEmployeeForm } from './CreateEmployeeForm';
+import { OperarioView } from '../views/OperarioView';
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -28,6 +29,7 @@ export const Desktop = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [isHrLoggedIn, setIsHrLoggedIn] = useState(false);
+  const [isOperarioLoggedIn, setIsOperarioLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
   const [status, setStatus] = useState('idle'); // idle, recognizing, verified, failed, clientError
@@ -84,6 +86,8 @@ export const Desktop = () => {
           setIsLoggedIn(true);
         } else if (user.departamento.nombre_departamento === 'Recursos Humanos' && user.cargo.nombre_cargo === 'Gerente') {
           setIsHrLoggedIn(true);
+        } else if (user.cargo.nombre_cargo === 'Operario') {
+          setIsOperarioLoggedIn(true);
         }
       }, 2000);
     } else if (result.error === 'ClientError') {
@@ -99,6 +103,7 @@ export const Desktop = () => {
     setIsLoggedIn(false);
     setIsAdminLoggedIn(false);
     setIsHrLoggedIn(false);
+    setIsOperarioLoggedIn(false);
     setCurrentUser(null);
     setStatus('idle');
     setResultData(null);
@@ -138,6 +143,8 @@ export const Desktop = () => {
         setIsLoggedIn(true);
       } else if (user.departamento.nombre_departamento === 'Recursos Humanos' && user.cargo.nombre_cargo === 'Gerente') {
         setIsHrLoggedIn(true);
+      } else if (user.cargo.nombre_cargo === 'Operario') {
+        setIsOperarioLoggedIn(true);
       } else {
         Swal.fire({
           title: 'Acceso Denegado',
@@ -209,7 +216,7 @@ export const Desktop = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            {!isLoggedIn && !isAdminLoggedIn && !isHrLoggedIn && (
+            {!isLoggedIn && !isAdminLoggedIn && !isHrLoggedIn && !isOperarioLoggedIn && (
               <>
                 <input
                   type="text"
@@ -243,9 +250,9 @@ export const Desktop = () => {
             <button
               onClick={handleLogin}
               className="w-full md:w-auto h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-              aria-label={(isLoggedIn || isAdminLoggedIn || isHrLoggedIn) ? "Salir" : "Ingresar"}
+              aria-label={(isLoggedIn || isAdminLoggedIn || isHrLoggedIn || isOperarioLoggedIn) ? "Salir" : "Ingresar"}
             >
-              {(isLoggedIn || isAdminLoggedIn || isHrLoggedIn) ? "Salir" : "Ingresar"}
+              {(isLoggedIn || isAdminLoggedIn || isHrLoggedIn || isOperarioLoggedIn) ? "Salir" : "Ingresar"}
             </button>
             <button
               onClick={handleHelp}
@@ -273,7 +280,7 @@ export const Desktop = () => {
         )}
 
         {/* Facial Recognition View */}
-        {!isLoggedIn && !isAdminLoggedIn && !isHrLoggedIn && (
+        {!isLoggedIn && !isAdminLoggedIn && !isHrLoggedIn && !isOperarioLoggedIn && (
           <section
             className="w-full max-w-2xl mx-auto flex flex-col items-center text-center mt-16 md:mt-24"
             aria-labelledby="facial-recognition-title"
@@ -339,6 +346,11 @@ export const Desktop = () => {
               )}
             </div>
           </section>
+        )}
+
+        {/* Operario View */}
+        {isOperarioLoggedIn && (
+          <OperarioView currentUser={currentUser} />
         )}
 
         {/* Admin View */}
