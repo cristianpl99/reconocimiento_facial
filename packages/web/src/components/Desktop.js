@@ -360,7 +360,7 @@ export const Desktop = () => {
         )}
 
         {/* HR View */}
-        {isHrLoggedIn && (
+        {isHrLoggedIn && hrMetrics && (
           <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
             <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
               <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${hrMetrics.distribucion_salarios}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Distribucion Salarios</button>
