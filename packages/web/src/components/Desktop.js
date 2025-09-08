@@ -12,6 +12,7 @@ import { CreateEmployeeForm } from './CreateEmployeeForm';
 import { OperarioView } from '../views/OperarioView';
 import { AdminView } from '../views/AdminView';
 import { IngresosEgresosList } from './IngresosEgresosList';
+import { EmployeeList } from './EmployeeList';
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -42,6 +43,7 @@ export const Desktop = () => {
   const [produccionMetrics, setProduccionMetrics] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
   const [showIngresosEgresos, setShowIngresosEgresos] = useState(false);
+  const [showEmployeeList, setShowEmployeeList] = useState(false);
 
   useEffect(() => {
     if (status === 'verified' || status === 'failed' || status === 'clientError') {
@@ -124,6 +126,7 @@ export const Desktop = () => {
     setResultData(null);
     setLastFrame(null);
     setShowIngresosEgresos(false);
+    setShowEmployeeList(false);
   };
 
   const handleLogin = async () => {
@@ -290,7 +293,7 @@ export const Desktop = () => {
               <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.produccion_vs_objetivo}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
             </div>
             <div className="w-full max-w-[1100px] mx-auto mt-8">
-              {displayImage ? <img src={displayImage} alt="Métrica de Producción" className="w-full h-auto" /> : <img src={mockProduccion} alt="Producción" className="w-full h-auto" />}
+              {displayImage && <img src={displayImage} alt="Métrica de Producción" className="w-full h-auto" />}
             </div>
           </section>
         )}
@@ -386,11 +389,13 @@ export const Desktop = () => {
                   <button onClick={() => { setDisplayImage(`data:image/jpeg;base64,${hrMetrics.empleados_por_departamento}`); setShowIngresosEgresos(false); }} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Empleados por Departamento</button>
                 </>
               )}
-              <button onClick={() => { setShowIngresosEgresos(true); setDisplayImage(null); }} className="h-12 px-6 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 whitespace-nowrap">Ingresos - Egresos</button>
+              <button onClick={() => { setShowIngresosEgresos(true); setDisplayImage(null); setShowEmployeeList(false); }} className="h-12 px-6 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 whitespace-nowrap">Ingresos - Egresos</button>
+              <button onClick={() => { setShowEmployeeList(true); setDisplayImage(null); setShowIngresosEgresos(false); }} className="h-12 px-6 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 whitespace-nowrap">Listado de Empleados</button>
             </div>
             <div className="w-full max-w-[1100px] mx-auto mt-8">
-              {displayImage && !showIngresosEgresos && <img src={displayImage} alt="Métrica de RRHH" className="w-full h-auto" />}
+              {displayImage && !showIngresosEgresos && !showEmployeeList && <img src={displayImage} alt="Métrica de RRHH" className="w-full h-auto" />}
               {showIngresosEgresos && <IngresosEgresosList />}
+              {showEmployeeList && <EmployeeList />}
             </div>
           </section>
         )}
