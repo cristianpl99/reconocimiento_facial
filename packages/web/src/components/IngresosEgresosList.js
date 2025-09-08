@@ -50,7 +50,7 @@ export const IngresosEgresosList = () => {
       {loading && <p>Cargando...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && (
-          <div className="overflow-y-auto flex-grow">
+        <div className="overflow-y-auto" style={{ maxHeight: '500px' }}>
           <ul className="divide-y divide-gray-200">
             {ingresos.map(ingreso => (
               <li key={ingreso.id} className="py-4">
