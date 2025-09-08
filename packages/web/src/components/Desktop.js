@@ -228,7 +228,7 @@ export const Desktop = () => {
       <div className="w-full max-w-screen-xl">
         <header className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-8">
           <div className="flex items-center gap-4">
-            <img src={iconoPyme} alt="Icono PyME" className="w-16 h-16 md:w-24 md:h-24 rounded-full" />
+            <img src={iconoPyme} alt="Icono PyME" className="w-20 h-20 md:w-28 md:h-28 rounded-full" />
             <div className="flex flex-col">
               <h1 className="text-3xl md:text-4xl font-bold">Foodlab</h1>
               <p className="text-sm md:text-base text-gray-600">PyME Alimenticia</p>
