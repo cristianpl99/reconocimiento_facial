@@ -25,3 +25,19 @@ export const createEmployee = async (employeeData) => {
     throw error;
   }
 };
+
+export const getAllEmployees = async () => {
+  try {
+    const response = await fetch(API_URL);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errorData = await response.json().catch(() => ({ message: 'Error desconocido en el servidor.' }));
+      console.error("Error al obtener empleados:", response.status, errorData);
+      throw new Error(errorData.message || 'Error al obtener los empleados.');
+    }
+  } catch (error) {
+    console.error("Error de red o al procesar la petición:", error);
+    throw error;
+  }
+};
