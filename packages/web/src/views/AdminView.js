@@ -56,17 +56,17 @@ export const AdminView = () => {
   return (
     <section className="w-full mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 mt-16 md:mt-24">
       {/* Left side: Create Employee Form */}
-      <div className="w-full md:w-1/2">
+      <div className="w-full md:w-1/2 flex-1">
         <CreateEmployeeForm />
       </div>
 
       {/* Right side: List of entries */}
-      <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-lg flex flex-col">
-        <h2 className="text-2xl font-bold mb-4">Ingresos y Egresos</h2>
+      <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-lg flex flex-col flex-1">
+        <h2 className="text-2xl font-bold mb-4 flex-shrink-0">Ingresos y Egresos</h2>
         {loading && <p>Cargando...</p>}
         {error && <p className="text-red-500">{error}</p>}
         {!loading && !error && (
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto flex-grow">
             <ul className="divide-y divide-gray-200">
               {ingresos.map(ingreso => (
                 <li key={ingreso.id} className="py-4">
