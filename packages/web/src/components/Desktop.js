@@ -9,6 +9,9 @@ import { loginUser } from "../services/authService";
 import { getHrMetrics } from "../services/dataService";
 import Swal from 'sweetalert2';
 import { CreateEmployeeForm } from './CreateEmployeeForm';
+import { OperarioView } from '../views/OperarioView';
+import { AdminView } from '../views/AdminView';
+import { IngresosEgresosList } from './IngresosEgresosList';
 
 const CheckIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -278,16 +281,16 @@ export const Desktop = () => {
         </header>
 
         {/* Employee View */}
-        {isLoggedIn && (
+        {isLoggedIn && produccionMetrics && (
           <section className="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-24">
             <div className="w-full flex flex-row flex-wrap gap-4 justify-center">
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Desperdicio por tipo de producto</button>
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción por producto</button>
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por turno</button>
-              <button className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.desperdicio_por_producto}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Desperdicio por tipo de producto</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.produccion_por_producto}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción por producto</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.eficiencia_por_turno}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Eficiencia por turno</button>
+              <button onClick={() => setDisplayImage(`data:image/jpeg;base64,${produccionMetrics.produccion_vs_objetivo}`)} className="h-12 px-6 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 whitespace-nowrap">Producción real vs. Objetivo diario</button>
             </div>
             <div className="w-full max-w-[1100px] mx-auto mt-8">
-              <img src={mockProduccion} alt="Producción" className="w-full h-auto" />
+              {displayImage ? <img src={displayImage} alt="Métrica de Producción" className="w-full h-auto" /> : <img src={mockProduccion} alt="Producción" className="w-full h-auto" />}
             </div>
           </section>
         )}
